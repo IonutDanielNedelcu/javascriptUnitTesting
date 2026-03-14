@@ -1,0 +1,311 @@
+# Mutation for register
+mutation {
+  register(input: {
+    email: "daniel@studybuddies.com",
+    password: "Daniel123!",
+    username: "danielnedelcu",
+    firstName: "Daniel",
+    lastName: "Nedelcu"
+  }) {
+    token
+    user { userID email username }
+  }
+}
+
+
+
+# Mutation for login
+mutation Login($input: LoginInput!) {
+  login(input: $input) {
+    token
+    user {
+      userID
+      email
+      username
+    }
+  }
+}
+
+# Mutation for logout
+mutation { logout }
+
+
+# Mutation for removing someone
+mutation {
+  removeUser(username: "bob")
+}
+
+
+
+# Mutation for adding a position to someone
+mutation {
+  addPositionToUser(username: "alice", positionID: 1) {
+    userID
+    username
+    position { positionID name seniority }
+    roles { roleID name }
+  }
+}
+
+# Mutation for removing a position from someone
+mutation {
+  removePositionFromUser(username: "bob") {
+    userID
+    username
+    position { positionID name seniority }
+    roles { roleID name }
+  }
+}
+
+# Mutation for creating a new position
+mutation {
+  createPosition(name: "Cloud Engineer", seniority: "Senior") {
+    positionID
+    name
+    seniority
+  }
+}
+
+# Mutation for deleting a position
+mutation {
+  removePosition(positionID: 5) {
+    positionID
+    name
+    seniority
+  }
+}
+
+# Mutation for creating a new repository
+mutation {
+  createRepository(input: {
+    name: "study-buddies-ai", 
+    url: "https://github.com/studybuddies/ai-module"
+  }) {
+    repositoryID
+    name
+    url
+  }
+}
+
+# Mutation for creating a new project
+mutation {
+  createProject(input: {
+    name: "AI Suggestion Module", 
+    description: "Machine learning component for study suggestions", 
+    repositoryID: 1
+  }) {
+    projectID
+    name
+    description
+    repository {
+      name
+      url
+    }
+  }
+}
+
+# Mutation for adding a user to a project
+mutation {
+  addUserToProject(input: { projectID: 1, userID: 2 })
+}
+
+# Mutation for removing a user from a project
+mutation {
+  removeUserFromProject(input: { projectID: 1, userID: 2 })
+}
+
+# Mutation for changing a user's team
+mutation {
+  changeUserTeam(userID: 2, teamName: "DevOps") {
+    userID
+    username
+    team {
+      teamID
+      name
+    }
+  }
+}
+
+# Mutation for updating a project
+mutation {
+  updateProject(input: {
+    projectID: 1, 
+    name: "Updated Project Name", 
+    description: "Updated description"
+  }) {
+    projectID
+    name
+    description
+    repository {
+      repositoryID
+      name
+      url
+    }
+  }
+}
+
+# Mutation for deleting a project
+mutation {
+  deleteProject(projectID: 1)
+}
+
+# Mutation for creating a new team
+mutation {
+  createTeam(input: { name: "Quality Assurance" }) {
+    teamID
+    name
+  }
+}
+
+# Mutation for deleting a team
+mutation {
+  deleteTeam(teamID: 1)
+}
+
+
+
+# Mutation for creating a new sprint 
+mutation {
+  createSprint(input: {
+    number: 6,
+    description: "Sprint 6 - Feature work",
+    startDate: "2026-06-01",
+    endDate: "2026-06-30",
+    projectID: 1
+  }) {
+    sprintID
+    number
+    description
+    startDate
+    endDate
+    project {
+      projectID
+      name
+    }
+  }
+}
+
+
+# Mutation for updating a sprint
+mutation {
+  updateSprint(input: { sprintID: 22, description: "Updated after creation" }) {
+    sprintID
+    number
+    description
+    startDate
+    endDate
+    projectID
+  }
+}
+
+# Mutation for deleting a sprint
+mutation {
+  deleteSprint(sprintID: 22)
+}
+
+
+
+# Mutation for creating a new task
+mutation {
+  createTask(input: { name: "Verify mutation for creating a task", description: "Verify mutation for creating a task", status: "Open", assigneeUsername: "alice", projectName: "Study Buddies Web App", sprintNumber: 5 }) {
+    taskID
+    name
+    description
+    status
+    assignee { 
+      userID 
+      username 
+      email
+    }
+    reporter { 
+      userID 
+      username 
+      email
+    }
+    sprint { 
+      sprintID 
+      number 
+    }
+    project { 
+      projectID 
+      name 
+    }
+  }
+}
+
+# Mutation for updating a task
+mutation {
+  updateTask(input: { taskID: 160, status: "In Progress"}) {
+    taskID
+    name
+    status
+    assignee { 
+      userID 
+      username 
+      email
+    }
+    reporter { 
+      userID 
+      username 
+      email
+    }
+    sprint { 
+      sprintID 
+      number 
+    }
+    project { 
+      projectID 
+      name 
+    }
+  }
+}
+
+# Mutation for deleting a task
+mutation {
+  deleteTask(taskID: 160)
+}
+
+
+
+# Mutation for creating a new comment
+mutation {
+  createComment(input: { text: "Good job with mutations", taskID: 1 }) {
+    commentID
+    text
+    date
+    user { 
+      userID 
+      username 
+      email
+    }
+    task { 
+      taskID 
+      name 
+      status
+    }
+  }
+}
+
+# Mutation for updating a comment
+mutation {
+  updateComment(input: { commentID: 598, text: "Updated: Good job" }) {
+    commentID
+    text
+    date
+    user { 
+      userID 
+      username 
+      email
+    }
+    task { 
+      taskID 
+      name 
+      status
+    }
+  }
+}
+
+# Mutation for deleting a comment
+mutation {
+  deleteComment(commentID: 598)
+}

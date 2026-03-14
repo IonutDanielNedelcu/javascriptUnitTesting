@@ -1,0 +1,750 @@
+# -----------------------------
+# Roles
+# -----------------------------
+
+# Query for all roles
+{
+  roles {
+    roleID
+    name
+  }
+}
+
+# Query for the role with a specific name
+{
+  role(name: "Admin") {
+    roleID
+    name
+  }
+}
+
+# Query for all users (incomplete)
+
+# Enter your graphQL query here.
+{
+  users {
+    userID
+    username
+    firstName
+    lastName
+    team {
+      teamID
+      name
+    }
+    position {
+      positionID
+      seniority
+      name
+    }
+    roles {
+      roleID
+      name
+    }
+  }
+}
+
+# -----------------------------
+# Positions
+# -----------------------------
+
+# All positions
+{ 
+  positions 
+  { 
+    positionID 
+    name 
+    seniority 
+  } 
+}
+
+# Positions with seniority
+{ 
+  positionsBySeniority(seniority: "Senior") 
+  { 
+    positionID 
+    name 
+    seniority 
+  } 
+}
+
+# Positions with name
+{ 
+  positionsByName(name: "Frontend Developer") 
+  { 
+    positionID 
+    name 
+    seniority 
+  } 
+}
+
+# -----------------------------
+# Teams
+# -----------------------------
+
+# All teams
+{ 
+  teams 
+  { 
+    teamID 
+    name 
+  } 
+}
+
+# Team by name
+{ 
+  teamByName(name: "Frontend") 
+  { 
+    teamID 
+    name 
+  } 
+}
+
+
+
+# Query for all projects (with repository and assigned users)
+{
+  projects {
+    projectID
+    name
+    description
+    repository {
+      name
+      url
+    }
+    users {
+      username
+      team {
+        name
+      }
+      position {
+        name
+      }
+    }
+  }
+}
+
+# Query for all repositories
+{
+  repositories {
+    repositoryID
+    name
+    url
+  }
+}
+
+# Query for repository by name
+{
+  repositoryByName(name: "studyBuddies-frontend") {
+    repositoryID
+    name
+    url
+  }
+}
+
+# Query for all projects with full details
+{
+  projects {
+    projectID
+    name
+    description
+    repository {
+      repositoryID
+      name
+      url
+    }
+    users {
+      userID
+      username
+      firstName
+      lastName
+    }
+  }
+}
+
+# Query for projects by user
+{
+  projectsByUser(userID: 1) {
+    projectID
+    name
+    description
+    repository {
+      name
+      url
+    }
+  }
+}
+
+# -----------------------------
+# Sprints
+# -----------------------------
+
+# All sprints
+{
+  sprints {
+    sprintID
+    number
+    description
+    startDate
+    endDate
+    project {
+      projectID
+      name
+    }
+  }
+}
+
+# Sprint by projectName + sprintNumber
+{
+  sprint(projectName: "Study Buddies Web App", sprintNumber: 1) {
+    sprintID
+    number
+    description
+    startDate
+    endDate
+    project { 
+      projectID 
+      name 
+    }
+  }
+}
+
+# Sprints from a project (by projectName)
+{
+  sprintsFromProject(projectName: "Study Buddies Web App") {
+    sprintID
+    number
+    description
+    startDate
+    endDate
+  }
+}
+
+
+# -----------------------------
+# Tasks
+# -----------------------------
+
+# All tasks
+{
+  tasks {
+    taskID
+    name
+    description
+    status
+    reporter { 
+      userID 
+      username 
+      email
+    }
+    assignee { 
+      userID 
+      username 
+      email
+    }
+    sprint { 
+      sprintID 
+      number 
+    }
+    project { 
+      projectID 
+      name 
+    }
+  }
+}
+
+# User's tasks
+{
+  myTasks {
+    taskID
+    name
+    description
+    status
+    reporter { 
+      userID 
+      username 
+      email
+    }
+    assignee { 
+      userID 
+      username 
+      email
+    }
+    sprint { 
+      sprintID 
+      number 
+    }
+    project { 
+      projectID 
+      name 
+    }
+  }
+}
+
+# Tasks for a sprint (by projectName + sprintNumber)
+{
+  tasksFromSprint(projectName: "Study Buddies Web App", sprintNumber: "2") {
+    taskID
+    name
+    description
+    status
+    reporter { 
+      userID 
+      username 
+      email
+    }
+    assignee { 
+      userID 
+      username 
+      email
+    }
+    sprint { 
+      sprintID 
+      number 
+    }
+    project { 
+      projectID 
+      name 
+    }
+  }
+}
+
+# Tasks for a project (by projectName)
+{
+  tasksFromProject(projectName: "Study Buddies Web App") {
+    taskID
+    name
+    description
+    status
+    reporter { 
+      userID 
+      username 
+      email
+    }
+    assignee { 
+      userID 
+      username 
+      email
+    }
+    sprint { 
+      sprintID 
+      number 
+    }
+    project { 
+      projectID 
+      name 
+    }
+  }
+}
+
+# Task by ID
+{
+  task(taskID: 7) {
+    taskID
+    name
+    description
+    status
+    reporter { 
+      userID 
+      username 
+      email
+    }
+    assignee { 
+      userID 
+      username 
+      email
+    }
+    sprint { 
+      sprintID 
+      number 
+    }
+    project { 
+      projectID 
+      name 
+    }
+  }
+}
+
+# Tasks for an employee (by employeeUsername)
+{
+  tasksOfEmployee(employeeUsername: "alice") {
+    taskID
+    name
+    description
+    status
+    reporter { 
+      userID 
+      username 
+      email
+    }
+    assignee { 
+      userID 
+      username 
+      email
+    }
+    sprint { 
+      sprintID 
+      number 
+    }
+    project { 
+      projectID 
+      name 
+    }
+  }
+}
+
+# Tasks with a given status
+{
+  tasksWithStatus(status: "Open") {
+    taskID
+    name
+    description
+    status
+    reporter { 
+      userID 
+      username 
+      email
+    }
+    assignee { 
+      userID 
+      username 
+      email
+    }
+    sprint { 
+      sprintID 
+      number 
+    }
+    project { 
+      projectID 
+      name 
+    }
+  }
+}
+
+
+# -----------------------------
+# Comments
+# -----------------------------
+
+# Comments for a task
+{
+  commentsByTask(taskID: 10) {
+    commentID
+    text
+    date
+    user { 
+      userID 
+      username 
+      email
+    }
+    task { 
+      taskID 
+      name 
+      status
+    }
+  }
+}
+
+# All comments 
+{
+  comments {
+    commentID
+    text
+    date
+    user { 
+      userID 
+      username 
+      email
+    }
+    task { 
+      taskID 
+      name 
+      status
+    }
+  }
+}
+
+# Comment by ID
+{
+  comment(commentID: 100) {
+    commentID
+    text
+    date
+    user { 
+      userID 
+      username 
+      email
+    }
+    task { 
+      taskID 
+      name 
+      status
+    }
+  }
+}
+
+# Comments by employee username
+{
+  commentsOfEmployee(employeeUsername: "alice") {
+    commentID
+    text
+    date
+    user { 
+      userID 
+      username 
+      email
+    }
+    task { 
+      taskID 
+      name 
+      status
+    }
+  }
+}
+
+
+# -----------------------------
+# Paginated queries 
+# -----------------------------
+
+# Sprints
+{
+  sprintsPage(offset: 0, limit: 20) {
+    totalCount
+    hasMore
+    items {
+      sprintID
+      number
+      description
+      startDate
+      endDate
+      project { 
+        projectID 
+        name 
+      }
+    }
+  }
+}
+
+# Sprints from a project
+{
+  sprintsFromProjectPage(projectName: "Study Buddies Web App", offset: 0, limit: 10) {
+    totalCount
+    hasMore
+    items {
+      sprintID
+      number
+      description
+      startDate
+      endDate
+      project { 
+        projectID 
+        name 
+      }
+    }
+  }
+}
+
+# Tasks
+{
+  tasksPage(offset: 0, limit: 40) {
+    totalCount
+    hasMore
+    items {
+      taskID
+      name
+      description
+      status
+      reporter { 
+        userID 
+        username 
+        email
+      }
+      assignee { 
+        userID 
+        username 
+        email
+      }
+      sprint { 
+        sprintID 
+        number 
+      }
+      project { 
+        projectID 
+        name 
+      }
+    }
+  }
+}
+
+# Tasks from a project
+{
+  tasksFromProjectPage(projectName: "Study Buddies Web App", offset: 0, limit: 20) {
+    totalCount
+    hasMore
+    items { 
+      taskID 
+      name 
+      description 
+      status 
+      reporter { 
+        userID 
+        username 
+        email
+      }
+      assignee { 
+        userID 
+        username 
+        email
+      }
+      sprint { 
+        sprintID 
+        number 
+      }
+      project { 
+        projectID 
+        name 
+      }
+    }
+  }
+}
+
+# Tasks from a sprint
+{
+  tasksFromSprintPage(projectName: "Study Buddies Web App", sprintNumber: "1", offset: 0, limit: 20) {
+    totalCount
+    hasMore
+    items { 
+      taskID 
+      name 
+      description 
+      status 
+      reporter { 
+        userID 
+        username 
+        email
+      }
+      assignee { 
+        userID 
+        username 
+        email
+      }
+      sprint { 
+        sprintID 
+        number 
+      }
+      project { 
+        projectID 
+        name 
+      }
+    }  
+  }
+}
+
+# Tasks of an employee
+{
+  tasksOfEmployeePage(employeeUsername: "alice", offset: 0, limit: 5) {
+    totalCount
+    hasMore
+    items { 
+      taskID 
+      name 
+      description 
+      status 
+      reporter { 
+        userID 
+        username 
+        email
+      }
+      assignee { 
+        userID 
+        username 
+        email
+      }
+      sprint { 
+        sprintID 
+        number 
+      }
+      project { 
+        projectID 
+        name 
+      }
+    }  
+  }
+}
+
+# Tasks with status
+{
+  tasksWithStatusPage(status: "Open", offset: 0, limit: 20) {
+    totalCount
+    hasMore
+    items { 
+      taskID 
+      name 
+      description 
+      status 
+      reporter { 
+        userID 
+        username 
+        email
+      }
+      assignee { 
+        userID 
+        username 
+        email
+      }
+      sprint { 
+        sprintID 
+        number 
+      }
+      project { 
+        projectID 
+        name 
+      }
+    }
+  }
+}
+
+# Comments
+{
+  commentsPage(offset: 0, limit: 100) {
+    totalCount
+    hasMore
+    items { 
+      commentID 
+      text 
+      date 
+      user { 
+        userID 
+        username 
+        email
+      } 
+      task { 
+        taskID 
+        name 
+        status
+      } 
+    }
+  }
+}
+
+# Comments by task
+{
+  commentsByTaskPage(taskID: 10, offset: 0, limit: 10) {
+    totalCount
+    hasMore
+    items { 
+      commentID 
+      text 
+      date 
+      user { 
+        userID 
+        username 
+        email
+      } 
+      task { 
+        taskID 
+        name 
+        status
+      } 
+    }  }
+}
