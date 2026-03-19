@@ -10,11 +10,12 @@
 3. Testing Strategies and Implementation
   3.1 Equivalence Class Partitioning (EP)
   3.2 Boundary Value Analysis (BVA)
-  3.3 Control Flow and Coverage Metrics
-    3.3.1 Statement Coverage
-    3.3.2 Decision (Branch) Coverage
-    3.3.3 Condition Coverage
-    3.3.4 Independent Paths Analysis
+  3.3 Category Partitioning (CP)
+  3.4 Control Flow and Coverage Metrics
+    3.4.1 Statement Coverage
+    3.4.2 Decision (Branch) Coverage
+    3.4.3 Condition Coverage
+    3.4.4 Independent Paths Analysis
 
 4. Mutation Testing
   4.1 Mutation Generator Setup and Execution (targets: resolvers, services, validation logic)
