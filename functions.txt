@@ -1,0 +1,117 @@
+3. Testing Strategies and Implementation (Users and Projects)
+
+3.1 Equivalence Class Partitioning (EP)
+  3.1.1 usersValidClasses
+    - registerValidInputClass
+      files: graphql/mutations/registerMutation.js
+      functions: resolve
+      related: graphql/inputTypes/registerInputType.js (RegisterInput fields)
+    - loginValidInputClass
+      files: graphql/mutations/loginMutation.js
+      functions: resolve
+      related: graphql/inputTypes/loginInputType.js (LoginInput fields)
+    - addRoleValidClass
+      files: graphql/mutations/addRoleToUserMutation.js
+      functions: resolve
+      related: utils/authorize.js (authorizeRoles)
+  3.1.2 usersInvalidClasses
+    - registerMissingFieldClass, registerDuplicateClass
+      files: graphql/mutations/registerMutation.js
+      functions: resolve
+    - loginInvalidClass
+      files: graphql/mutations/loginMutation.js
+      functions: resolve
+    - roleChangeInvalidClass
+      files: graphql/mutations/addRoleToUserMutation.js, graphql/mutations/removeRoleFromUserMutation.js
+      functions: resolve
+      related: utils/authorize.js (authorizeRoles)
+  3.1.3 projectsValidClasses
+    - createProjectValidClass
+      files: graphql/mutations/createProjectMutation.js
+      functions: resolve
+      related: utils/authorize.js (authorizeRoles)
+    - updateProjectValidClass
+      files: graphql/mutations/updateProjectMutation.js
+      functions: resolve
+    - addUserToProjectValidClass
+      files: graphql/mutations/addUserToProjectMutation.js
+      functions: resolve
+  3.1.4 projectsInvalidClasses
+    - createProjectDuplicateNameClass, createProjectRepositoryMissingClass, createProjectRepositoryAssignedClass
+      files: graphql/mutations/createProjectMutation.js
+      functions: resolve
+    - updateProjectMissingClass
+      files: graphql/mutations/updateProjectMutation.js
+      functions: resolve
+    - addUserToProjectDuplicateClass
+      files: graphql/mutations/addUserToProjectMutation.js
+      functions: resolve
+    - removeUserFromProjectMissingClass
+      files: graphql/mutations/removeUserFromProjectMutation.js
+      functions: resolve
+
+3.2 Boundary Value Analysis (BVA)
+  3.2.1 inputLengthBoundaries
+    - emailLengthBoundary
+      files: graphql/mutations/registerMutation.js, graphql/mutations/loginMutation.js
+      functions: resolve
+      boundary: 4Vs5And254Vs255
+    - usernameLengthBoundary
+      files: graphql/mutations/registerMutation.js
+      functions: resolve
+      boundary: 2Vs3And30Vs31
+    - passwordLengthBoundary
+      files: graphql/mutations/registerMutation.js, graphql/mutations/loginMutation.js
+      functions: resolve
+      boundary: 7Vs8And64Vs65
+    - firstLastNameLengthBoundary
+      files: graphql/mutations/registerMutation.js
+      functions: resolve
+      boundary: 1Vs2And50Vs51
+    - projectNameLengthBoundary
+      files: graphql/mutations/createProjectMutation.js, graphql/mutations/updateProjectMutation.js
+      functions: resolve
+      boundary: 2Vs3And50Vs51
+    - projectDescriptionLengthBoundary
+      files: graphql/mutations/createProjectMutation.js, graphql/mutations/updateProjectMutation.js
+      functions: resolve
+      boundary: 500Vs501
+  3.2.2 numericBoundaries
+    - projectIdExistenceBoundary
+      files: graphql/mutations/updateProjectMutation.js, graphql/mutations/deleteProjectMutation.js
+      functions: resolve
+      boundary: existingIdVsNonExistingId
+    - repositoryIdExistenceBoundary
+      files: graphql/mutations/createProjectMutation.js
+      functions: resolve
+      boundary: existingIdVsNonExistingId
+
+3.3 Control Flow and Coverage Metrics
+  3.3.1 Statement Coverage
+    - usersAndAuthResolvers
+      files: graphql/mutations/registerMutation.js, graphql/mutations/loginMutation.js, graphql/mutations/addRoleToUserMutation.js, graphql/mutations/removeRoleFromUserMutation.js, graphql/mutations/removeUserMutation.js
+      functions: resolve
+    - projectResolvers
+      files: graphql/mutations/createProjectMutation.js, graphql/mutations/updateProjectMutation.js, graphql/mutations/deleteProjectMutation.js, graphql/mutations/addUserToProjectMutation.js, graphql/mutations/removeUserFromProjectMutation.js
+      functions: resolve
+  3.3.2 Decision (Branch) Coverage
+    - authorizationBranches
+      files: utils/authorize.js
+      functions: authorizeRoles, authorizeOrSelf
+    - authenticationBranches
+      files: graphql/queries/userByUsernameQuery.js, graphql/queries/projectsQuery.js, graphql/queries/projectByNameQuery.js, graphql/queries/projectsByUserQuery.js
+      functions: resolve
+  3.3.3 Condition Coverage
+    - roleClaimsBranches
+      files: middlewares/jwtMiddleware.js
+      functions: jwtMiddleware
+    - repositoryAssignmentBranches
+      files: graphql/mutations/createProjectMutation.js
+      functions: resolve
+  3.3.4 Independent Paths Analysis
+    - userMutationPaths
+      files: graphql/mutations/registerMutation.js, graphql/mutations/loginMutation.js
+      functions: resolve
+    - projectMutationPaths
+      files: graphql/mutations/createProjectMutation.js
+      functions: resolve

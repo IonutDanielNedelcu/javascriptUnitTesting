@@ -1,11 +1,26 @@
 module.exports = {
   testEnvironment: 'node',
+  setupFiles: ['./__tests__/setupEnv.js'],
   setupFilesAfterEnv: ['./__tests__/setup.js'],
   testMatch: ['**/__tests__/**/*.test.js'],
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/__tests__/setup.js',
     '/__tests__/helpers.js',
+  ],
+  collectCoverageFrom: [
+    'graphql/**/*.js',
+    'models/**/*.js',
+    'middlewares/**/*.js',
+    'utils/**/*.js',
+    'app.js',
+    'index.js',
+    '!**/node_modules/**',
+    '!**/__tests__/**',
+    '!**/migrations/**',
+    '!**/seeders/**',
+    '!**/scripts/**',
+    '!**/websocket/**',
   ],
   testTimeout: 10000,
 };

@@ -1,0 +1,53 @@
+4. Mutation Testing (Users and Projects)
+
+4.1 Mutation Generator Setup and Execution
+  4.1.1 toolSetupAndCommand
+    files: package.json (test script), jest.config.js
+    functions: n/a
+    targets: graphql/mutations, utils/authorize.js, middlewares/jwtMiddleware.js
+  4.1.2 targetSelectionUsers
+    - registerMutationTargets
+      files: graphql/mutations/registerMutation.js
+      functions: resolve
+      focus: inputValidation, duplicateChecks, roleAssignment, jwt.sign
+    - loginMutationTargets
+      files: graphql/mutations/loginMutation.js
+      functions: resolve
+      focus: credentialCheck, jwt.sign
+    - roleMutationTargets
+      files: graphql/mutations/addRoleToUserMutation.js, graphql/mutations/removeRoleFromUserMutation.js
+      functions: resolve
+      focus: authorizeRoles, roleExistenceChecks
+  4.1.3 targetSelectionProjects
+    - createProjectTargets
+      files: graphql/mutations/createProjectMutation.js
+      functions: resolve
+      focus: duplicateNameCheck, repositoryChecks, assignmentRules
+    - updateProjectTargets
+      files: graphql/mutations/updateProjectMutation.js
+      functions: resolve
+      focus: projectLookup, repositoryValidation
+    - addRemoveUserTargets
+      files: graphql/mutations/addUserToProjectMutation.js, graphql/mutations/removeUserFromProjectMutation.js
+      functions: resolve
+      focus: existingLinkChecks, authorization
+
+4.2 Analysis of the Mutation Report
+  4.2.1 usersMutationAnalysis
+    files: graphql/mutations/registerMutation.js, graphql/mutations/loginMutation.js
+    functions: resolve
+    focus: survivedMutantsInMissingFieldGuardsOrDuplicateChecks
+  4.2.2 projectsMutationAnalysis
+    files: graphql/mutations/createProjectMutation.js, graphql/mutations/updateProjectMutation.js
+    functions: resolve
+    focus: survivedMutantsInRepositoryAssignedOrDuplicateNameChecks
+
+4.3 Strategy for Eliminating Surviving Mutants
+  4.3.1 usersMitigationPlan
+    files: __tests__/users.test.js
+    functions: testCases
+    focus: assertErrorMessages, assertNoUserCreated, assertJwtClaims
+  4.3.2 projectsMitigationPlan
+    files: __tests__/projects.test.js
+    functions: testCases
+    focus: repositoryConflictTests, authorizationTests, duplicateLinkTests

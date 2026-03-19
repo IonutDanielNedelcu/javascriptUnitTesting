@@ -4,6 +4,10 @@ const CreateProjectInputType = require('../inputTypes/createProjectInputType');
 const db = require('../../models');
 const { authorizeRoles } = require('../../utils/authorize');
 
+const projectNameMinLength = 3;
+const projectNameMaxLength = 50;
+const descriptionMaxLength = 500;
+
 module.exports = {
   type: ProjectType,
   args: {
@@ -11,8 +15,19 @@ module.exports = {
   },
   resolve: async (_source, args, context) => {
     const input = args.input || args;
-    const { name, description, repositoryID } = input;
+    const rawName = input.name || '';
+    const name = rawName.trim();
+    const description = typeof input.description === 'string' ? input.description.trim() : null;
+    const { repositoryID } = input;
     authorizeRoles(context, ['Admin', 'Manager']);
+
+    if (!name) throw new Error('Project name is required');
+    if (name.length < projectNameMinLength || name.length > projectNameMaxLength) {
+      throw new Error('Project name must be between 3 and 50 characters');
+    }
+    if (description && description.length > descriptionMaxLength) {
+      throw new Error('Description must be at most 500 characters');
+    }
 
     const existingProject = await db.Project.findOne({ where: { name } });
     if (existingProject) {
@@ -32,7 +47,7 @@ module.exports = {
 
     const newProject = await db.Project.create({
       name,
-      description,
+      description: description || null,
       repositoryID: repositoryID || null,
     });
 

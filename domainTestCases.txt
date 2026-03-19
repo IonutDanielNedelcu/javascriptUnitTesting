@@ -1,0 +1,49 @@
+5. Domain Test Cases (Users and Projects)
+
+5.1 Users
+  - register
+    files: graphql/mutations/registerMutation.js
+    functions: resolve
+    tests: __tests__/users.test.js (registerSuccessCreatesEmployeeRoleAndToken, registerFailsWithMissingEmail, registerFailsWithDuplicateEmail)
+  - login (JWT)
+    files: graphql/mutations/loginMutation.js
+    functions: resolve
+    tests: __tests__/users.test.js (loginSuccessReturnsToken, loginFailsWithInvalidPassword)
+  - roleAssignment
+    files: graphql/mutations/addRoleToUserMutation.js, graphql/mutations/removeRoleFromUserMutation.js
+    functions: resolve
+    tests: __tests__/users.test.js (addRoleToUserRequiresAdmin, addRoleToUserAssignsRole, removeRoleFromUserFailsWhenRoleMissing)
+  - permissionChecks
+    files: utils/authorize.js, graphql/queries/userByUsernameQuery.js, graphql/queries/usersQuery.js
+    functions: authorizeRoles, authorizeOrSelf, resolve
+    tests: __tests__/users.test.js (usersQueryReturnsErrorWhenEmpty, userByUsernameRequiresAuthentication, userByUsernamePreventsRoleLeakForOtherUsers)
+  - validationErrors
+    files: graphql/mutations/registerMutation.js, graphql/mutations/loginMutation.js
+    functions: resolve
+    tests: __tests__/users.test.js (registerFailsWithMissingEmail, registerFailsWithDuplicateEmail, loginFailsWithInvalidPassword)
+
+5.2 Projects
+  - create
+    files: graphql/mutations/createProjectMutation.js
+    functions: resolve
+    tests: __tests__/projects.test.js (createProjectSucceedsForManager, createProjectRejectsDuplicateName, createProjectRejectsMissingRepository, createProjectRejectsAssignedRepository)
+  - update
+    files: graphql/mutations/updateProjectMutation.js
+    functions: resolve
+    tests: __tests__/projects.test.js (updateProjectFailsWhenMissing)
+  - delete
+    files: graphql/mutations/deleteProjectMutation.js
+    functions: resolve
+    tests: __tests__/projects.test.js (deleteProjectRequiresAdmin)
+  - addRemoveUser
+    files: graphql/mutations/addUserToProjectMutation.js, graphql/mutations/removeUserFromProjectMutation.js
+    functions: resolve
+    tests: __tests__/projects.test.js (addUserToProjectCreatesLink, addUserToProjectRejectsDuplicates, removeUserFromProjectErrorsWhenMissing)
+  - repoAssignment
+    files: graphql/mutations/createProjectMutation.js
+    functions: resolve
+    tests: __tests__/projects.test.js (createProjectRejectsMissingRepository, createProjectRejectsAssignedRepository)
+  - validationErrors
+    files: graphql/mutations/createProjectMutation.js, graphql/mutations/updateProjectMutation.js
+    functions: resolve
+    tests: __tests__/projects.test.js (createProjectRejectsDuplicateName, updateProjectFailsWhenMissing)

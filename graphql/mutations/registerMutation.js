@@ -7,26 +7,61 @@ const RegisterInputType = require('../inputTypes/registerInputType');
 const db = require('../../models');
 const { JWT_SECRET_KEY } = require('../../constants');
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const emailMinLength = 5;
+const emailMaxLength = 254;
+const usernameMinLength = 3;
+const usernameMaxLength = 30;
+const passwordMinLength = 8;
+const passwordMaxLength = 64;
+const nameMinLength = 2;
+const nameMaxLength = 50;
+
 module.exports = {
   type: AuthType,
   args: {
     input: { type: new GraphQLNonNull(RegisterInputType) },
   },
   async resolve(_, { input }) {
-    // validate required fields
-    if (!input.email) throw new Error('Email is required');
-    if (!input.password) throw new Error('Password is required');
-    if (!input.username) throw new Error('Username is required');
-    if (!input.firstName) throw new Error('First name is required');
-    if (!input.lastName) throw new Error('Last name is required');
+    const email = (input.email || '').trim();
+    const password = input.password || '';
+    const username = (input.username || '').trim();
+    const firstName = (input.firstName || '').trim();
+    const lastName = (input.lastName || '').trim();
 
-    const existingEmail = await db.User.findOne({ where: { email: input.email } });
+    if (!email) throw new Error('Email is required');
+    if (email.length < emailMinLength || email.length > emailMaxLength) {
+      throw new Error('Email must be between 5 and 254 characters');
+    }
+    if (!emailRegex.test(email)) throw new Error('Email is invalid');
+
+    if (!password) throw new Error('Password is required');
+    if (password.length < passwordMinLength || password.length > passwordMaxLength) {
+      throw new Error('Password must be between 8 and 64 characters');
+    }
+
+    if (!username) throw new Error('Username is required');
+    if (username.length < usernameMinLength || username.length > usernameMaxLength) {
+      throw new Error('Username must be between 3 and 30 characters');
+    }
+
+    if (!firstName) throw new Error('First name is required');
+    if (firstName.length < nameMinLength || firstName.length > nameMaxLength) {
+      throw new Error('First name must be between 2 and 50 characters');
+    }
+
+    if (!lastName) throw new Error('Last name is required');
+    if (lastName.length < nameMinLength || lastName.length > nameMaxLength) {
+      throw new Error('Last name must be between 2 and 50 characters');
+    }
+
+    const existingEmail = await db.User.findOne({ where: { email } });
     if (existingEmail) {
       throw new Error('Email already in use');
     }
 
-    if (input.username) {
-      const existingUsername = await db.User.findOne({ where: { username: input.username } });
+    if (username) {
+      const existingUsername = await db.User.findOne({ where: { username } });
       if (existingUsername) {
         throw new Error('Username already in use');
       }
@@ -35,11 +70,11 @@ module.exports = {
     const hashed = await bcrypt.hash(input.password, 10);
 
     const user = await db.User.create({
-      email: input.email,
+      email,
       password: hashed,
-      username: input.username || null,
-      firstName: input.firstName || null,
-      lastName: input.lastName || null,
+      username,
+      firstName,
+      lastName,
       // position and team are not settable during registration
     });
 

@@ -1,0 +1,483 @@
+Equivalence Partitionings (Users and Projects)
+Note: Classes are non-overlapping; each rule set is exclusive and any overlaps are split into separate classes.
+
+Users - register (grouped by field)
+  email
+    - emailValidClass (valid)
+      rule: formatValidAndLengthInRangeAndUnique
+      representativeInput: email="user1@example.com"
+      expectedOutputDomain: success
+    - emailMissingClass (invalid)
+      rule: emailEmptyOrMissing
+      representativeInput: email=""
+      expectedOutputDomain: error "Email is required"
+    - emailTooShortClass (invalid)
+      rule: emailLengthLessThan5
+      representativeInput: email="a@b."
+      expectedOutputDomain: error "Email must be between 5 and 254 characters"
+    - emailTooLongClass (invalid)
+      rule: emailLengthGreaterThan254
+      representativeInput: email="a"*249 + "@b.co"
+      expectedOutputDomain: error "Email must be between 5 and 254 characters"
+    - emailInvalidFormatClass (invalid)
+      rule: emailDoesNotMatchRegex
+      representativeInput: email="invalid-email"
+      expectedOutputDomain: error "Email is invalid"
+    - emailDuplicateClass (invalid)
+      rule: emailAlreadyInUse
+      representativeInput: email="dup@example.com" (pre-seeded)
+      expectedOutputDomain: error "Email already in use"
+
+  password
+    - passwordValidClass (valid)
+      rule: lengthInRange
+      representativeInput: password="Pass123!"
+      expectedOutputDomain: success
+    - passwordMissingClass (invalid)
+      rule: passwordEmptyOrMissing
+      representativeInput: password=""
+      expectedOutputDomain: error "Password is required"
+    - passwordTooShortClass (invalid)
+      rule: passwordLengthLessThan8
+      representativeInput: password="abcdefg"
+      expectedOutputDomain: error "Password must be between 8 and 64 characters"
+    - passwordTooLongClass (invalid)
+      rule: passwordLengthGreaterThan64
+      representativeInput: password="a"*65
+      expectedOutputDomain: error "Password must be between 8 and 64 characters"
+
+  username
+    - usernameValidClass (valid)
+      rule: lengthInRangeAndUnique
+      representativeInput: username="user123"
+      expectedOutputDomain: success
+    - usernameMissingClass (invalid)
+      rule: usernameEmptyOrMissing
+      representativeInput: username=""
+      expectedOutputDomain: error "Username is required"
+    - usernameTooShortClass (invalid)
+      rule: usernameLengthLessThan3
+      representativeInput: username="ab"
+      expectedOutputDomain: error "Username must be between 3 and 30 characters"
+    - usernameTooLongClass (invalid)
+      rule: usernameLengthGreaterThan30
+      representativeInput: username="a"*31
+      expectedOutputDomain: error "Username must be between 3 and 30 characters"
+    - usernameDuplicateClass (invalid)
+      rule: usernameAlreadyInUse
+      representativeInput: username="dupuser" (pre-seeded)
+      expectedOutputDomain: error "Username already in use"
+
+  firstName
+    - firstNameValidClass (valid)
+      rule: lengthInRange
+      representativeInput: firstName="Alice"
+      expectedOutputDomain: success
+    - firstNameMissingClass (invalid)
+      rule: firstNameEmptyOrMissing
+      representativeInput: firstName=""
+      expectedOutputDomain: error "First name is required"
+    - firstNameTooShortClass (invalid)
+      rule: firstNameLengthLessThan2
+      representativeInput: firstName="A"
+      expectedOutputDomain: error "First name must be between 2 and 50 characters"
+    - firstNameTooLongClass (invalid)
+      rule: firstNameLengthGreaterThan50
+      representativeInput: firstName="a"*51
+      expectedOutputDomain: error "First name must be between 2 and 50 characters"
+
+  lastName
+    - lastNameValidClass (valid)
+      rule: lengthInRange
+      representativeInput: lastName="Doe"
+      expectedOutputDomain: success
+    - lastNameMissingClass (invalid)
+      rule: lastNameEmptyOrMissing
+      representativeInput: lastName=""
+      expectedOutputDomain: error "Last name is required"
+    - lastNameTooShortClass (invalid)
+      rule: lastNameLengthLessThan2
+      representativeInput: lastName="B"
+      expectedOutputDomain: error "Last name must be between 2 and 50 characters"
+    - lastNameTooLongClass (invalid)
+      rule: lastNameLengthGreaterThan50
+      representativeInput: lastName="a"*51
+      expectedOutputDomain: error "Last name must be between 2 and 50 characters"
+
+Users - login (grouped by field)
+  email
+    - emailValidClass (valid)
+      rule: formatValidAndLengthInRange
+      representativeInput: email="login@example.com"
+      expectedOutputDomain: successOrCredentialCheck
+    - emailMissingClass (invalid)
+      rule: emailEmptyOrMissing
+      representativeInput: email=""
+      expectedOutputDomain: error "Email is required"
+    - emailTooShortClass (invalid)
+      rule: emailLengthLessThan5
+      representativeInput: email="a@b."
+      expectedOutputDomain: error "Email must be between 5 and 254 characters"
+    - emailTooLongClass (invalid)
+      rule: emailLengthGreaterThan254
+      representativeInput: email="a"*249 + "@b.co"
+      expectedOutputDomain: error "Email must be between 5 and 254 characters"
+    - emailInvalidFormatClass (invalid)
+      rule: emailDoesNotMatchRegex
+      representativeInput: email="invalid-email"
+      expectedOutputDomain: error "Email is invalid"
+
+  password
+    - passwordValidClass (valid)
+      rule: lengthInRange
+      representativeInput: password="Login123!"
+      expectedOutputDomain: successOrCredentialCheck
+    - passwordMissingClass (invalid)
+      rule: passwordEmptyOrMissing
+      representativeInput: password=""
+      expectedOutputDomain: error "Password is required"
+    - passwordTooShortClass (invalid)
+      rule: passwordLengthLessThan8
+      representativeInput: password="abcdefg"
+      expectedOutputDomain: error "Password must be between 8 and 64 characters"
+    - passwordTooLongClass (invalid)
+      rule: passwordLengthGreaterThan64
+      representativeInput: password="a"*65
+      expectedOutputDomain: error "Password must be between 8 and 64 characters"
+
+  accountState
+    - userNotFoundClass (invalid)
+      rule: noUserForEmail
+      representativeInput: email="missing@example.com" (not seeded)
+      expectedOutputDomain: error "Invalid credentials"
+    - passwordMismatchClass (invalid)
+      rule: userExistsButPasswordWrong
+      representativeInput: email="login@example.com", password="Wrong123!"
+      expectedOutputDomain: error "Invalid credentials"
+
+Users - roleAssignment (grouped by variable)
+  context
+    - adminContextClass (valid)
+      rule: viewerHasAdminRole
+      representativeInput: roles=["Admin"]
+      expectedOutputDomain: success
+    - nonAdminClass (invalid)
+      rule: viewerNotAdmin
+      representativeInput: roles=["Employee"]
+      expectedOutputDomain: error "Not authorized"
+  user
+    - userExistsClass (valid)
+      rule: userExists
+      representativeInput: username="target"
+      expectedOutputDomain: success
+    - userNotFoundClass (invalid)
+      rule: userDoesNotExist
+      representativeInput: username="missingUser"
+      expectedOutputDomain: error "User not found"
+  role
+    - roleExistsClass (valid)
+      rule: roleExists
+      representativeInput: roleName="Manager"
+      expectedOutputDomain: success
+    - roleNotFoundClass (invalid)
+      rule: roleDoesNotExist
+      representativeInput: roleName="Unknown"
+      expectedOutputDomain: error "Role not found"
+    - roleAlreadyAssignedClass (invalid)
+      rule: userAlreadyHasRole
+      representativeInput: roleName="Employee" (already linked)
+      expectedOutputDomain: error "User already has this role"
+
+Projects - create (grouped by field)
+  context
+    - adminManagerContextClass (valid)
+      rule: viewerHasAdminOrManagerRole
+      representativeInput: roles=["Admin"]
+      expectedOutputDomain: success
+    - nonAdminManagerClass (invalid)
+      rule: viewerNotAdminOrManager
+      representativeInput: roles=["Employee"]
+      expectedOutputDomain: error "Not authorized"
+
+  name
+    - nameValidClass (valid)
+      rule: lengthInRangeAndUnique
+      representativeInput: name="ProjectAlpha"
+      expectedOutputDomain: success
+    - nameMissingClass (invalid)
+      rule: nameEmptyOrMissing
+      representativeInput: name=""
+      expectedOutputDomain: error "Project name is required"
+    - nameTooShortClass (invalid)
+      rule: nameLengthLessThan3
+      representativeInput: name="ab"
+      expectedOutputDomain: error "Project name must be between 3 and 50 characters"
+    - nameTooLongClass (invalid)
+      rule: nameLengthGreaterThan50
+      representativeInput: name="a"*51
+      expectedOutputDomain: error "Project name must be between 3 and 50 characters"
+    - nameDuplicateClass (invalid)
+      rule: projectNameAlreadyExists
+      representativeInput: name="ProjectDup" (pre-seeded)
+      expectedOutputDomain: error "A project with this name already exists"
+
+  repositoryID
+    - repositoryMissingClass (valid)
+      rule: repositoryIdNotProvided
+      representativeInput: repositoryID=null
+      expectedOutputDomain: success
+    - repositoryIdNotFoundClass (invalid)
+      rule: repositoryIdDoesNotExist
+      representativeInput: repositoryID=999
+      expectedOutputDomain: error "Repository ID not found"
+    - repositoryAlreadyAssignedClass (invalid)
+      rule: repositoryAlreadyLinkedToProject
+      representativeInput: repositoryID=1 (already linked)
+      expectedOutputDomain: error "This repository is already assigned to another project"
+
+  description
+    - descriptionValidClass (valid)
+      rule: lengthInRangeOrMissing
+      representativeInput: description="Short desc"
+      expectedOutputDomain: success
+    - descriptionTooLongClass (invalid)
+      rule: descriptionLengthGreaterThan500
+      representativeInput: description="a"*501
+      expectedOutputDomain: error "Description must be at most 500 characters"
+
+Projects - update (grouped by field)
+  context
+    - adminManagerContextClass (valid)
+      rule: viewerHasAdminOrManagerRole
+      representativeInput: roles=["Admin"]
+      expectedOutputDomain: success
+    - nonAdminManagerClass (invalid)
+      rule: viewerNotAdminOrManager
+      representativeInput: roles=["Employee"]
+      expectedOutputDomain: error "Not authorized"
+
+  projectID
+    - projectExistsClass (valid)
+      rule: projectExists
+      representativeInput: projectID=1 (existing)
+      expectedOutputDomain: success
+    - projectNotFoundClass (invalid)
+      rule: projectDoesNotExist
+      representativeInput: projectID=999
+      expectedOutputDomain: error "Project not found"
+
+  name
+    - nameValidClass (valid)
+      rule: nameLengthInRange
+      representativeInput: name="NewName"
+      expectedOutputDomain: success
+    - nameMissingClass (invalid)
+      rule: nameProvidedButEmpty
+      representativeInput: name=""
+      expectedOutputDomain: error "Project name is required"
+    - nameTooShortClass (invalid)
+      rule: nameLengthLessThan3
+      representativeInput: name="ab"
+      expectedOutputDomain: error "Project name must be between 3 and 50 characters"
+    - nameTooLongClass (invalid)
+      rule: nameLengthGreaterThan50
+      representativeInput: name="a"*51
+      expectedOutputDomain: error "Project name must be between 3 and 50 characters"
+
+  description
+    - descriptionValidClass (valid)
+      rule: lengthInRangeOrMissing
+      representativeInput: description="Updated desc"
+      expectedOutputDomain: success
+    - descriptionTooLongClass (invalid)
+      rule: descriptionLengthGreaterThan500
+      representativeInput: description="a"*501
+      expectedOutputDomain: error "Description must be at most 500 characters"
+
+  repositoryID
+    - repositoryMissingClass (valid)
+      rule: repositoryIdNotProvided
+      representativeInput: repositoryID=null
+      expectedOutputDomain: success
+    - repositoryIdNotFoundClass (invalid)
+      rule: repositoryIdDoesNotExist
+      representativeInput: repositoryID=999
+      expectedOutputDomain: error "Repository ID not found"
+
+Projects - delete (grouped by variable)
+  context
+    - adminContextClass (valid)
+      rule: viewerHasAdminRole
+      representativeInput: roles=["Admin"]
+      expectedOutputDomain: success
+    - nonAdminClass (invalid)
+      rule: viewerNotAdmin
+      representativeInput: roles=["Employee"]
+      expectedOutputDomain: error "Not authorized"
+  projectID
+    - projectExistsClass (valid)
+      rule: projectExists
+      representativeInput: projectID=1 (existing)
+      expectedOutputDomain: success
+    - projectNotFoundClass (invalid)
+      rule: projectDoesNotExist
+      representativeInput: projectID=999
+      expectedOutputDomain: error "Project not found"
+
+Projects - addUserToProject (grouped by variable)
+  context
+    - adminManagerContextClass (valid)
+      rule: viewerHasAdminOrManagerRole
+      representativeInput: roles=["Admin"]
+      expectedOutputDomain: success
+    - nonAdminManagerClass (invalid)
+      rule: viewerNotAdminOrManager
+      representativeInput: roles=["Employee"]
+      expectedOutputDomain: error "Not authorized"
+  projectID
+    - projectExistsClass (valid)
+      rule: projectExists
+      representativeInput: projectID=1 (existing)
+      expectedOutputDomain: success
+    - projectNotFoundClass (invalid)
+      rule: projectDoesNotExist
+      representativeInput: projectID=999
+      expectedOutputDomain: error "Project not found"
+  userID
+    - userExistsClass (valid)
+      rule: userExists
+      representativeInput: userID=1 (existing)
+      expectedOutputDomain: success
+    - userNotFoundClass (invalid)
+      rule: userDoesNotExist
+      representativeInput: userID=999
+      expectedOutputDomain: error "User not found"
+  linkState
+    - notAssignedClass (valid)
+      rule: noExistingLink
+      representativeInput: (userID, projectID) not linked
+      expectedOutputDomain: success
+    - alreadyAssignedClass (invalid)
+      rule: userAlreadyAssignedToProject
+      representativeInput: (userID, projectID) pre-linked
+      expectedOutputDomain: error "User is already assigned to this project"
+
+Projects - removeUserFromProject (grouped by variable)
+  context
+    - adminManagerContextClass (valid)
+      rule: viewerHasAdminOrManagerRole
+      representativeInput: roles=["Admin"]
+      expectedOutputDomain: success
+    - nonAdminManagerClass (invalid)
+      rule: viewerNotAdminOrManager
+      representativeInput: roles=["Employee"]
+      expectedOutputDomain: error "Not authorized"
+  linkState
+    - linkExistsClass (valid)
+      rule: userAssignedToProject
+      representativeInput: (userID, projectID) pre-linked
+      expectedOutputDomain: success
+    - linkNotFoundClass (invalid)
+      rule: userNotAssignedToProjectOrInvalidIds
+      representativeInput: (userID, projectID) not linked
+      expectedOutputDomain: error "User was not assigned to this project or project/user not found"
+
+Summaries
+  inputDomainSummary
+    - usersRegisterInputs: email, password, username, firstName, lastName, plus uniqueness constraints
+    - usersLoginInputs: email, password, plus accountState constraints
+    - usersRoleAssignmentInputs: contextRole, username, roleName
+    - projectsCreateInputs: contextRole, name, repositoryID, description
+    - projectsUpdateInputs: contextRole, projectID, optionalName, optionalDescription, optionalRepositoryID
+    - projectsDeleteInputs: contextRole, projectID
+    - projectsAddUserInputs: contextRole, projectID, userID, linkState
+    - projectsRemoveUserInputs: contextRole, projectID, userID, linkState
+  outputDomainSummary
+    - successOutputs: authTokenAndUser, projectEntityOrBoolean, updatedEntities
+    - errorOutputs: validationErrors, notAuthorizedErrors, notFoundErrors, conflictErrors
+
+Category Partitioning
+  note: test cases are derived by combining exactly one choice from each category. One-valid-at-a-time means one category is invalid while all others are valid.
+  prunedCategories
+    - descriptionCategory: validAndMissingMerged (both map to success)
+    - repositoryCategory: repositoryMissingMergedWithRepositoryValid (both map to success)
+  finalCategories
+    - register: emailCategory x passwordCategory x usernameCategory x firstNameCategory x lastNameCategory x uniquenessCategory
+    - login: emailCategory x passwordCategory x accountStateCategory
+    - roleAssignment: contextCategory x userCategory x roleCategory
+    - createProject: contextCategory x nameCategory x repositoryCategory x descriptionCategory
+    - updateProject: contextCategory x projectIdCategory x nameCategory x descriptionCategory x repositoryCategory
+    - deleteProject: contextCategory x projectIdCategory
+    - addUserToProject: contextCategory x projectIdCategory x userIdCategory x linkStateCategory
+    - removeUserFromProject: contextCategory x linkStateCategory
+  categoryCombinationsOneValidAtATime
+    register
+      - registerAllValid
+      - registerEmailMissing
+      - registerEmailTooShort
+      - registerEmailTooLong
+      - registerEmailInvalidFormat
+      - registerEmailDuplicate
+      - registerPasswordMissing
+      - registerPasswordTooShort
+      - registerPasswordTooLong
+      - registerUsernameMissing
+      - registerUsernameTooShort
+      - registerUsernameTooLong
+      - registerUsernameDuplicate
+      - registerFirstNameMissing
+      - registerFirstNameTooShort
+      - registerFirstNameTooLong
+      - registerLastNameMissing
+      - registerLastNameTooShort
+      - registerLastNameTooLong
+    login
+      - loginAllValid
+      - loginEmailMissing
+      - loginEmailTooShort
+      - loginEmailTooLong
+      - loginEmailInvalidFormat
+      - loginPasswordMissing
+      - loginPasswordTooShort
+      - loginPasswordTooLong
+      - loginUserNotFound
+      - loginPasswordMismatch
+    roleAssignment
+      - roleAssignmentAllValid
+      - roleAssignmentNonAdmin
+      - roleAssignmentUserNotFound
+      - roleAssignmentRoleNotFound
+      - roleAssignmentRoleAlreadyAssigned
+    createProject
+      - createProjectAllValid
+      - createProjectNonAdmin
+      - createProjectNameMissing
+      - createProjectNameTooShort
+      - createProjectNameTooLong
+      - createProjectNameDuplicate
+      - createProjectRepositoryNotFound
+      - createProjectRepositoryAssigned
+      - createProjectDescriptionTooLong
+    updateProject
+      - updateProjectAllValid
+      - updateProjectNonAdmin
+      - updateProjectNotFound
+      - updateProjectNameMissing
+      - updateProjectNameTooShort
+      - updateProjectNameTooLong
+      - updateProjectDescriptionTooLong
+      - updateProjectRepositoryNotFound
+    deleteProject
+      - deleteProjectAllValid
+      - deleteProjectNonAdmin
+      - deleteProjectNotFound
+    addUserToProject
+      - addUserToProjectAllValid
+      - addUserToProjectNonAdmin
+      - addUserToProjectProjectNotFound
+      - addUserToProjectUserNotFound
+      - addUserToProjectAlreadyAssigned
+    removeUserFromProject
+      - removeUserFromProjectAllValid
+      - removeUserFromProjectNonAdmin
+      - removeUserFromProjectLinkNotFound
