@@ -17,12 +17,13 @@ function makeString(length) {
 }
 
 function makeEmailOfLength(length) {
-  const domain = '@ba.co';
+  const domain = '@studybuddies.com';
   const localLength = length - domain.length;
   return `${makeString(localLength)}${domain}`;
 }
 
 describe('users_loginMutation', () => {
+  // test 1
   test('loginAllValid', async () => {
     await createUser({
       email: 'thisisanemail@studybuddies.com',
@@ -44,6 +45,7 @@ describe('users_loginMutation', () => {
     expect(result.data.login.token).toBeTruthy();
   });
 
+  // test 2
   test('loginEmailMissing', async () => {
     const input = {
       email: '',
@@ -58,6 +60,7 @@ describe('users_loginMutation', () => {
     expect(result.errors[0].message).toBe('Email is required');
   });
 
+  // test 3
   test('loginEmailTooShort', async () => {
     const input = {
       email: 'a@b.',
@@ -72,6 +75,7 @@ describe('users_loginMutation', () => {
     expect(result.errors[0].message).toBe('Email must be between 5 and 254 characters');
   });
 
+  // test 4
   test('loginEmailTooLong', async () => {
     const input = {
       email: makeEmailOfLength(255),
@@ -86,6 +90,7 @@ describe('users_loginMutation', () => {
     expect(result.errors[0].message).toBe('Email must be between 5 and 254 characters');
   });
 
+  // test 5
   test('loginEmailInvalidFormat', async () => {
     const input = {
       email: 'invalid-email',
@@ -100,6 +105,7 @@ describe('users_loginMutation', () => {
     expect(result.errors[0].message).toBe('Email is invalid');
   });
 
+  // test 6
   test('loginPasswordMissing', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -114,6 +120,7 @@ describe('users_loginMutation', () => {
     expect(result.errors[0].message).toBe('Password is required');
   });
 
+  // test 7
   test('loginPasswordTooShort', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -128,6 +135,7 @@ describe('users_loginMutation', () => {
     expect(result.errors[0].message).toBe('Password must be between 8 and 64 characters');
   });
 
+  // test 8
   test('loginPasswordTooLong', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -142,6 +150,7 @@ describe('users_loginMutation', () => {
     expect(result.errors[0].message).toBe('Password must be between 8 and 64 characters');
   });
 
+  // test 9
   test('loginUserNotFound', async () => {
     const input = {
       email: 'missing@studybuddies.com',
@@ -156,6 +165,7 @@ describe('users_loginMutation', () => {
     expect(result.errors[0].message).toBe('Invalid credentials');
   });
 
+  // test 10
   test('loginPasswordMismatch', async () => {
     await createUser({
       email: 'login@studybuddies.com',

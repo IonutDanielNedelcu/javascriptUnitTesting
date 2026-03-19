@@ -12,11 +12,12 @@ const deleteProjectMutation = `
 `;
 
 describe('projects_deleteProjectMutation', () => {
+  // test 1
   test('deleteProjectAllValid', async () => {
     const admin = await createUserWithRoles({
-      email: 'admindelete@example.com',
-      password: 'Pass123!',
-      username: 'admindelete',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -33,15 +34,16 @@ describe('projects_deleteProjectMutation', () => {
     expect(result.data.deleteProject).toBe(true);
   });
 
+  // test 2
   test('deleteProjectNonAdmin', async () => {
     const employee = await createUserWithRoles({
-      email: 'employee3@example.com',
-      password: 'Pass123!',
-      username: 'employee3',
+      email: 'employee@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'employee',
       roles: ['Employee'],
     });
 
-    const project = await createProject({ name: 'DeleteProject2' });
+    const project = await createProject({ name: 'DeleteProject' });
     expect(project.projectID).toBe(1);
 
     const result = await executeGraphql({
@@ -53,11 +55,12 @@ describe('projects_deleteProjectMutation', () => {
     expect(result.errors[0].message).toBe('Not authorized');
   });
 
+  // test 3
   test('deleteProjectNotFound', async () => {
     const admin = await createUserWithRoles({
-      email: 'admindelete2@example.com',
-      password: 'Pass123!',
-      username: 'admindelete2',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 

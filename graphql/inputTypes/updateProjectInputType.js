@@ -6,6 +6,7 @@ const UpdateProjectInputType = new GraphQLInputObjectType({
     projectID: { type: new GraphQLNonNull(GraphQLInt) },
     name: { type: GraphQLString },
     description: { type: GraphQLString },
+    repositoryID: { type: GraphQLInt },
   },
 });
 

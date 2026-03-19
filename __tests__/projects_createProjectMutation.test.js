@@ -22,10 +22,11 @@ function makeString(length) {
 }
 
 describe('projects_createProjectMutation', () => {
+  // test 1
   test('createProjectAllValid', async () => {
     const admin = await createUserWithRoles({
-      email: 'admin@example.com',
-      password: 'Pass123!',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
       username: 'admin',
       roles: ['Admin'],
     });
@@ -46,11 +47,12 @@ describe('projects_createProjectMutation', () => {
     expect(result.data.createProject.name).toBe('JavascriptTesting');
   });
 
+  // test 2
   test('createProjectNonAdmin', async () => {
     const employee = await createUserWithRoles({
-      email: 'employeeproj@example.com',
-      password: 'Pass123!',
-      username: 'employeeproj',
+      email: 'employee@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'employee',
       roles: ['Employee'],
     });
 
@@ -68,11 +70,12 @@ describe('projects_createProjectMutation', () => {
     expect(result.errors[0].message).toBe('Not authorized');
   });
 
+  // test 3
   test('createProjectNameMissing', async () => {
     const admin = await createUserWithRoles({
-      email: 'adminmissing@example.com',
-      password: 'Pass123!',
-      username: 'adminmissing',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -90,11 +93,12 @@ describe('projects_createProjectMutation', () => {
     expect(result.errors[0].message).toBe('Project name is required');
   });
 
+  // test 4
   test('createProjectNameTooShort', async () => {
     const admin = await createUserWithRoles({
-      email: 'adminshort@example.com',
-      password: 'Pass123!',
-      username: 'adminshort',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -112,11 +116,12 @@ describe('projects_createProjectMutation', () => {
     expect(result.errors[0].message).toBe('Project name must be between 3 and 50 characters');
   });
 
+  // test 5
   test('createProjectNameTooLong', async () => {
     const admin = await createUserWithRoles({
-      email: 'adminlong@example.com',
-      password: 'Pass123!',
-      username: 'adminlong',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -134,12 +139,13 @@ describe('projects_createProjectMutation', () => {
     expect(result.errors[0].message).toBe('Project name must be between 3 and 50 characters');
   });
 
+  // test 6
   test('createProjectNameDuplicate', async () => {
     await createProject({ name: 'DuplicateName' });
 
     const admin = await createUserWithRoles({
-      email: 'admin@example.com',
-      password: 'Pass123!',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
       username: 'admin',
       roles: ['Admin'],
     });
@@ -158,11 +164,12 @@ describe('projects_createProjectMutation', () => {
     expect(result.errors[0].message).toBe('A project with this name already exists');
   });
 
+  // test 7
   test('createProjectRepositoryNotFound', async () => {
     const manager = await createUserWithRoles({
-      email: 'manager2@example.com',
-      password: 'Pass123!',
-      username: 'manager2',
+      email: 'manager@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'manager',
       roles: ['Manager'],
     });
 
@@ -181,11 +188,12 @@ describe('projects_createProjectMutation', () => {
     expect(result.errors[0].message).toBe('Repository ID not found');
   });
 
+  // test 8
   test('createProjectRepositoryAssigned', async () => {
     const admin = await createUserWithRoles({
-      email: 'admin2@example.com',
-      password: 'Pass123!',
-      username: 'admin2',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -211,11 +219,12 @@ describe('projects_createProjectMutation', () => {
     expect(result.errors[0].message).toBe('This repository is already assigned to another project');
   });
 
+  // test 9
   test('createProjectDescriptionTooLong', async () => {
     const admin = await createUserWithRoles({
-      email: 'admindesc@example.com',
-      password: 'Pass123!',
-      username: 'admindesc',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 

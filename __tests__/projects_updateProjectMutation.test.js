@@ -20,11 +20,12 @@ function makeString(length) {
 }
 
 describe('projects_updateProjectMutation', () => {
+  // test 1
   test('updateProjectAllValid', async () => {
     const admin = await createUserWithRoles({
-      email: 'adminupdatevalid@example.com',
-      password: 'Pass123!',
-      username: 'adminupdatevalid',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -47,11 +48,12 @@ describe('projects_updateProjectMutation', () => {
     expect(result.data.updateProject.name).toBe('NewName');
   });
 
+  // test 2
   test('updateProjectNonAdmin', async () => {
     const employee = await createUserWithRoles({
-      email: 'employeeupdate@example.com',
-      password: 'Pass123!',
-      username: 'employeeupdate',
+      email: 'employee@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'employee',
       roles: ['Employee'],
     });
 
@@ -73,11 +75,12 @@ describe('projects_updateProjectMutation', () => {
     expect(result.errors[0].message).toBe('Not authorized');
   });
 
+  // test 3
   test('updateProjectNotFound', async () => {
     const admin = await createUserWithRoles({
-      email: 'admin3@example.com',
-      password: 'Pass123!',
-      username: 'admin3',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -96,11 +99,12 @@ describe('projects_updateProjectMutation', () => {
     expect(result.errors[0].message).toBe('Project not found');
   });
 
+  // test 4
   test('updateProjectNameMissing', async () => {
     const admin = await createUserWithRoles({
-      email: 'adminupdatemissing@example.com',
-      password: 'Pass123!',
-      username: 'adminupdatemissing',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -122,11 +126,12 @@ describe('projects_updateProjectMutation', () => {
     expect(result.errors[0].message).toBe('Project name is required');
   });
 
+  // test 5
   test('updateProjectNameTooShort', async () => {
     const admin = await createUserWithRoles({
-      email: 'adminupdateshort@example.com',
-      password: 'Pass123!',
-      username: 'adminupdateshort',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -148,11 +153,12 @@ describe('projects_updateProjectMutation', () => {
     expect(result.errors[0].message).toBe('Project name must be between 3 and 50 characters');
   });
 
+  // test 6
   test('updateProjectNameTooLong', async () => {
     const admin = await createUserWithRoles({
-      email: 'adminupdate@example.com',
-      password: 'Pass123!',
-      username: 'adminupdate',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -174,11 +180,12 @@ describe('projects_updateProjectMutation', () => {
     expect(result.errors[0].message).toBe('Project name must be between 3 and 50 characters');
   });
 
+  // test 7
   test('updateProjectDescriptionTooLong', async () => {
     const admin = await createUserWithRoles({
-      email: 'admindescupdate@example.com',
-      password: 'Pass123!',
-      username: 'admindescupdate',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -200,11 +207,12 @@ describe('projects_updateProjectMutation', () => {
     expect(result.errors[0].message).toBe('Description must be at most 500 characters');
   });
 
+  // test 8
   test('updateProjectRepositoryNotFound', async () => {
     const admin = await createUserWithRoles({
-      email: 'adminupdaterepo@example.com',
-      password: 'Pass123!',
-      username: 'adminupdaterepo',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 

@@ -15,21 +15,22 @@ const addUserToProjectMutation = `
 `;
 
 describe('projects_addUserToProjectMutation', () => {
+  // test 1
   test('addUserToProjectAllValid', async () => {
     const project = await createProject({ name: 'AssignProject' });
     const user = await createUser({
-      email: 'assign@example.com',
-      password: 'Pass123!',
-      username: 'assignUser',
+      email: 'user@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'user',
     });
 
     expect(project.projectID).toBe(1);
     expect(user.userID).toBe(1);
 
     const admin = await createUserWithRoles({
-      email: 'admin4@example.com',
-      password: 'Pass123!',
-      username: 'admin4',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -50,21 +51,22 @@ describe('projects_addUserToProjectMutation', () => {
     expect(link).toBeTruthy();
   });
 
+  // test 2
   test('addUserToProjectNonAdmin', async () => {
     const project = await createProject({ name: 'AssignEmployeeProject' });
     const user = await createUser({
-      email: 'assignuser@example.com',
-      password: 'Pass123!',
-      username: 'assignuser',
+      email: 'user@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'user',
     });
 
     expect(project.projectID).toBe(1);
     expect(user.userID).toBe(1);
 
     const employee = await createUserWithRoles({
-      email: 'employeeassign@example.com',
-      password: 'Pass123!',
-      username: 'employeeassign',
+      email: 'employee@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'employee',
       roles: ['Employee'],
     });
 
@@ -79,19 +81,20 @@ describe('projects_addUserToProjectMutation', () => {
     expect(result.errors[0].message).toBe('Not authorized');
   });
 
+  // test 3
   test('addUserToProjectProjectNotFound', async () => {
     const user = await createUser({
-      email: 'assignuser2@example.com',
-      password: 'Pass123!',
-      username: 'assignuser2',
+      email: 'user@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'user',
     });
 
     expect(user.userID).toBe(1);
 
     const admin = await createUserWithRoles({
-      email: 'adminassignmissing@example.com',
-      password: 'Pass123!',
-      username: 'adminassignmissing',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -106,14 +109,15 @@ describe('projects_addUserToProjectMutation', () => {
     expect(result.errors[0].message).toBe('Project not found');
   });
 
+  // test 4
   test('addUserToProjectUserNotFound', async () => {
     const project = await createProject({ name: 'AssignMissingUserProject' });
     expect(project.projectID).toBe(1);
 
     const admin = await createUserWithRoles({
-      email: 'adminassignmissing2@example.com',
-      password: 'Pass123!',
-      username: 'adminassignmissing2',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -128,21 +132,22 @@ describe('projects_addUserToProjectMutation', () => {
     expect(result.errors[0].message).toBe('User not found');
   });
 
+  // test 5
   test('addUserToProjectAlreadyAssigned', async () => {
     const project = await createProject({ name: 'AssignDupProject' });
     const user = await createUser({
-      email: 'assign2@example.com',
-      password: 'Pass123!',
-      username: 'assignUser2',
+      email: 'user@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'user',
     });
 
     expect(project.projectID).toBe(1);
     expect(user.userID).toBe(1);
 
     const admin = await createUserWithRoles({
-      email: 'admin5@example.com',
-      password: 'Pass123!',
-      username: 'admin5',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 

@@ -68,7 +68,7 @@ function buildContextUser(user) {
 
 async function createRepository({
   name = 'Repo',
-  url = 'http://example.com/repo.git',
+  url = 'http://studybuddies.com/repo',
 } = {}) {
   return db.Repository.create({ name, url });
 }

@@ -87,6 +87,7 @@ module.exports = {
 
     // reload user with roles for returning
     const userWithRoles = await db.User.findByPk(user.userID, { include: [{ model: db.Role, as: 'roles' }, { model: db.Team, as: 'team' }, { model: db.Position, as: 'position' }] });
+    userWithRoles.__allowUnauthenticated = true;
 
     const roleNames = (userWithRoles.roles || []).map(r => r.name);
     const token = jwt.sign({ sub: user.userID, roles: roleNames }, JWT_SECRET_KEY, { expiresIn: '7d' });

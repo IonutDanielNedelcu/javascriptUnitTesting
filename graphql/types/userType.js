@@ -34,6 +34,12 @@ const UserType = new GraphQLObjectType({
     roles: {
       type: new GraphQLList(RoleType),
       resolve: (user, _args, context) => {
+        if (!context || !context.user) {
+          if (user && user.__allowUnauthenticated === true) {
+            return user.roles || [];
+          }
+          throw new Error('Not authenticated');
+        }
         const targetId = user.userID || user.id;
         const { authorizeOrSelf } = require('../../utils/authorize');
         authorizeOrSelf(context, targetId, ['Admin', 'Manager']);

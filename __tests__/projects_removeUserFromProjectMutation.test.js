@@ -14,21 +14,22 @@ const removeUserFromProjectMutation = `
 `;
 
 describe('projects_removeUserFromProjectMutation', () => {
+  // test 1
   test('removeUserFromProjectAllValid', async () => {
     const project = await createProject({ name: 'RemoveLinkProject' });
     const user = await createUser({
-      email: 'removeuser@example.com',
-      password: 'Pass123!',
-      username: 'removeuser',
+      email: 'user@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'user',
     });
 
     expect(project.projectID).toBe(1);
     expect(user.userID).toBe(1);
 
     const admin = await createUserWithRoles({
-      email: 'adminremove@example.com',
-      password: 'Pass123!',
-      username: 'adminremove',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 
@@ -46,21 +47,22 @@ describe('projects_removeUserFromProjectMutation', () => {
     expect(result.data.removeUserFromProject).toBe(true);
   });
 
+  // test 2
   test('removeUserFromProjectNonAdmin', async () => {
     const project = await createProject({ name: 'RemoveNonAdminProject' });
     const user = await createUser({
-      email: 'removeuser2@example.com',
-      password: 'Pass123!',
-      username: 'removeuser2',
+      email: 'user@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'user',
     });
 
     expect(project.projectID).toBe(1);
     expect(user.userID).toBe(1);
 
     const employee = await createUserWithRoles({
-      email: 'employeeremove@example.com',
-      password: 'Pass123!',
-      username: 'employeeremove',
+      email: 'employee@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'employee',
       roles: ['Employee'],
     });
 
@@ -75,21 +77,22 @@ describe('projects_removeUserFromProjectMutation', () => {
     expect(result.errors[0].message).toBe('Not authorized');
   });
 
+  // test 3
   test('removeUserFromProjectLinkNotFound', async () => {
     const project = await createProject({ name: 'RemoveProject' });
     const user = await createUser({
-      email: 'remove2@example.com',
-      password: 'Pass123!',
-      username: 'removeUser2',
+      email: 'user@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'user',
     });
 
     expect(project.projectID).toBe(1);
     expect(user.userID).toBe(1);
 
     const admin = await createUserWithRoles({
-      email: 'admin6@example.com',
-      password: 'Pass123!',
-      username: 'admin6',
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
       roles: ['Admin'],
     });
 

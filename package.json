@@ -9,8 +9,8 @@
     "test": "jest --runInBand",
     "test:watch": "NODE_ENV=test jest --watch",
     "test:mutation": "stryker run",
-    "test:users": "jest --runInBand --testPathPattern=__tests__/users_.*\.test\.js",
-    "test:projects": "jest --runInBand --testPathPattern=__tests__/projects_.*\.test\.js",
+    "test:users": "jest --runInBand --testPathPattern=__tests__/users_.*\\.test\\.js",
+    "test:projects": "jest --runInBand --testPathPattern=__tests__/projects_.*\\.test\\.js",
     "test:sprints": "jest --runInBand --testPathPattern=__tests__/sprints.test.js",
     "test:tasks": "jest --runInBand --testPathPattern=__tests__/tasks.test.js"
   },

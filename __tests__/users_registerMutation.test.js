@@ -23,12 +23,13 @@ function makeString(length) {
 }
 
 function makeEmailOfLength(length) {
-  const domain = '@ba.co';
+  const domain = '@studybuddies.com';
   const localLength = length - domain.length;
   return `${makeString(localLength)}${domain}`;
 }
 
 describe('users_registerMutation', () => {
+  // test 1
   test('registerAllValid', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -43,7 +44,7 @@ describe('users_registerMutation', () => {
       variableValues: { input },
     });
 
-    expect(result.errors).toBeUndefined();
+    expect(result.errors).toBeUndefined(); // shouldn't have any errors
     const { token, user } = result.data.register;
     expect(user.email).toBe('thisisanemail@studybuddies.com');
 
@@ -55,6 +56,7 @@ describe('users_registerMutation', () => {
     expect(payload.roles).toContain('Employee');
   });
 
+  // test 2
   test('registerEmailMissing', async () => {
     const input = {
       email: '',
@@ -72,6 +74,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Email is required');
   });
 
+  // test 3
   test('registerEmailTooShort', async () => {
     const input = {
       email: 'a@b.',
@@ -89,6 +92,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Email must be between 5 and 254 characters');
   });
 
+  // test 4
   test('registerEmailTooLong', async () => {
     const input = {
       email: makeEmailOfLength(255),
@@ -106,6 +110,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Email must be between 5 and 254 characters');
   });
 
+  // test 5
   test('registerEmailInvalidFormat', async () => {
     const input = {
       email: 'invalid-email',
@@ -123,6 +128,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Email is invalid');
   });
 
+  // test 6
   test('registerEmailDuplicate', async () => {
     await createUser({
       email: 'dup@example.com',
@@ -146,6 +152,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Email already in use');
   });
 
+  // test 7
   test('registerPasswordMissing', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -163,6 +170,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Password is required');
   });
 
+  // test 8
   test('registerPasswordTooShort', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -180,6 +188,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Password must be between 8 and 64 characters');
   });
 
+  // test 9
   test('registerPasswordTooLong', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -197,6 +206,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Password must be between 8 and 64 characters');
   });
 
+  // test 10
   test('registerUsernameMissing', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -214,6 +224,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Username is required');
   });
 
+  // test 11
   test('registerUsernameTooShort', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -231,6 +242,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Username must be between 3 and 30 characters');
   });
 
+  // test 12
   test('registerUsernameTooLong', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -248,6 +260,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Username must be between 3 and 30 characters');
   });
 
+  // test 13
   test('registerUsernameDuplicate', async () => {
     await createUser({
       email: 'thisisanemail@studybuddies.com',
@@ -271,6 +284,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Username already in use');
   });
 
+  // test 14
   test('registerFirstNameMissing', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -288,6 +302,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('First name is required');
   });
 
+  // test 15
   test('registerFirstNameTooShort', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -305,6 +320,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('First name must be between 2 and 50 characters');
   });
 
+  // test 16
   test('registerFirstNameTooLong', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -322,6 +338,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('First name must be between 2 and 50 characters');
   });
 
+  // test 17
   test('registerLastNameMissing', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -339,6 +356,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Last name is required');
   });
 
+  // test 18
   test('registerLastNameTooShort', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
@@ -356,6 +374,7 @@ describe('users_registerMutation', () => {
     expect(result.errors[0].message).toBe('Last name must be between 2 and 50 characters');
   });
 
+  // test 19
   test('registerLastNameTooLong', async () => {
     const input = {
       email: 'thisisanemail@studybuddies.com',
