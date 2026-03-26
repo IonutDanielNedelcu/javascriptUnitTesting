@@ -1,6 +1,7 @@
 const {
   executeGraphql,
   createUser,
+  createUserWithRoles,
 } = require('./helpers');
 
 const loginMutation = `
@@ -25,10 +26,11 @@ function makeEmailOfLength(length) {
 describe('users_loginMutation', () => {
   // test 1
   test('loginAllValid', async () => {
-    await createUser({
+    await createUserWithRoles({
       email: 'thisisanemail@studybuddies.com',
       password: 'StudyBuddies_123',
       username: 'user123',
+      roles: ['Employee'],
     });
 
     const input = {

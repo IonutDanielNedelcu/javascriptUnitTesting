@@ -2,6 +2,7 @@ const {
   executeGraphql,
   createUser,
   parseAuthToken,
+  db,
 } = require('./helpers');
 
 const registerMutation = `
@@ -54,6 +55,26 @@ describe('users_registerMutation', () => {
     const payload = parseAuthToken(token);
     expect(payload.sub).toBe(user.userID);
     expect(payload.roles).toContain('Employee');
+  });
+
+  test('registerAllValidWithoutEmployeeRole', async () => {
+    await db.Role.destroy({ where: { name: 'Employee' } });
+
+    const input = {
+      email: 'thisisanemail@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'user123',
+      firstName: 'Jenna',
+      lastName: 'Doe',
+    };
+
+    const result = await executeGraphql({
+      source: registerMutation,
+      variableValues: { input },
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.register.user.roles).toHaveLength(0);
   });
 
   // test 2

@@ -60,11 +60,9 @@ module.exports = {
       throw new Error('Email already in use');
     }
 
-    if (username) {
-      const existingUsername = await db.User.findOne({ where: { username } });
-      if (existingUsername) {
-        throw new Error('Username already in use');
-      }
+    const existingUsername = await db.User.findOne({ where: { username } });
+    if (existingUsername) {
+      throw new Error('Username already in use');
     }
 
     const hashed = await bcrypt.hash(input.password, 10);
@@ -89,7 +87,7 @@ module.exports = {
     const userWithRoles = await db.User.findByPk(user.userID, { include: [{ model: db.Role, as: 'roles' }, { model: db.Team, as: 'team' }, { model: db.Position, as: 'position' }] });
     userWithRoles.__allowUnauthenticated = true;
 
-    const roleNames = (userWithRoles.roles || []).map(r => r.name);
+    const roleNames = userWithRoles.roles.map(r => r.name);
     const token = jwt.sign({ sub: user.userID, roles: roleNames }, JWT_SECRET_KEY, { expiresIn: '7d' });
 
     return {

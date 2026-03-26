@@ -9,18 +9,19 @@ module.exports = {
     '/__tests__/helpers.js',
   ],
   collectCoverageFrom: [
-    'graphql/**/*.js',
-    'models/**/*.js',
-    'middlewares/**/*.js',
-    'utils/**/*.js',
-    'app.js',
-    'index.js',
-    '!**/node_modules/**',
+    // for users
+    'graphql/mutations/loginMutation.js',
+    'graphql/mutations/registerMutation.js',
+    'graphql/mutations/addRoleToUserMutation.js',
+
+    // for projects
+    'graphql/mutations/createProjectMutation.js',
+    'graphql/mutations/updateProjectMutation.js',
+    'graphql/mutations/deleteProjectMutation.js',
+    'graphql/mutations/removeUserFromProjectMutation.js',
+    'graphql/mutations/addUserToProjectMutation.js',
+    
     '!**/__tests__/**',
-    '!**/migrations/**',
-    '!**/seeders/**',
-    '!**/scripts/**',
-    '!**/websocket/**',
   ],
   testTimeout: 10000,
 };

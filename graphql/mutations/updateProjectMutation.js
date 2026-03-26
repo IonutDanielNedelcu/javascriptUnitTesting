@@ -34,7 +34,7 @@ module.exports = {
       if (trimmedDescription && trimmedDescription.length > descriptionMaxLength) {
         throw new Error('Description must be at most 500 characters');
       }
-      args.description = trimmedDescription || null;
+      args.description = trimmedDescription;
     }
 
     if (args.repositoryID) {

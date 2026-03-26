@@ -6,6 +6,8 @@ const {
   createProject,
 } = require('./helpers');
 
+const createProjectResolver = require('../graphql/mutations/createProjectMutation');
+
 const createProjectMutation = `
   mutation CreateProject($input: CreateProjectInput!) {
     createProject(input: $input) {
@@ -217,6 +219,76 @@ describe('projects_createProjectMutation', () => {
     });
 
     expect(result.errors[0].message).toBe('This repository is already assigned to another project');
+  });
+
+  test('createProjectRepositoryValidUnassigned', async () => {
+    const admin = await createUserWithRoles({
+      email: 'adminvalidrepo@example.com',
+      password: 'Pass123!',
+      username: 'adminvalidrepo',
+      roles: ['Admin'],
+    });
+
+    const repository = await createRepository({ name: 'RepoUnassigned' });
+
+    const input = {
+      name: 'JavascriptTesting',
+      description: 'Short description',
+      repositoryID: repository.repositoryID,
+    };
+
+    const result = await executeGraphql({
+      source: createProjectMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(admin),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.createProject.repository.repositoryID).toBe(repository.repositoryID);
+  });
+
+  test('createProjectAllValidNoDescription', async () => {
+    const admin = await createUserWithRoles({
+      email: 'admindescmissing@example.com',
+      password: 'Pass123!',
+      username: 'admindescmissing',
+      roles: ['Admin'],
+    });
+
+    const input = {
+      name: 'JavascriptTesting',
+      repositoryID: null,
+    };
+
+    const result = await executeGraphql({
+      source: createProjectMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(admin),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.createProject.description).toBeNull();
+  });
+
+  test('createProjectAllValidDirectArgs', async () => {
+    const admin = await createUserWithRoles({
+      email: 'adminargs@example.com',
+      password: 'Pass123!',
+      username: 'adminargs',
+      roles: ['Admin'],
+    });
+
+    const result = await createProjectResolver.resolve(
+      null,
+      {
+        name: 'JavascriptTesting',
+        description: 'Short description',
+        repositoryID: null,
+      },
+      { user: buildContextUser(admin) }
+    );
+
+    expect(result.name).toBe('JavascriptTesting');
   });
 
   // test 9

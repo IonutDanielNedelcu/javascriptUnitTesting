@@ -3,6 +3,7 @@ const {
   createUserWithRoles,
   buildContextUser,
   createProject,
+  createRepository,
 } = require('./helpers');
 
 const updateProjectMutation = `
@@ -233,5 +234,31 @@ describe('projects_updateProjectMutation', () => {
     });
 
     expect(result.errors[0].message).toBe('Repository ID not found');
+  });
+
+  test('updateProjectRepositoryValidOnly', async () => {
+    const admin = await createUserWithRoles({
+      email: 'adminupdaterepovalid@example.com',
+      password: 'Pass123!',
+      username: 'adminupdaterepovalid',
+      roles: ['Admin'],
+    });
+
+    const project = await createProject({ name: 'RepoUpdateValidProject' });
+    const repository = await createRepository({ name: 'RepoValid' });
+
+    const input = {
+      projectID: project.projectID,
+      repositoryID: repository.repositoryID,
+    };
+
+    const result = await executeGraphql({
+      source: updateProjectMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(admin),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.updateProject.projectID).toBe(project.projectID);
   });
 });

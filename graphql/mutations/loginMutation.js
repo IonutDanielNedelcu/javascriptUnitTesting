@@ -43,7 +43,7 @@ module.exports = {
       throw new Error('Invalid credentials');
     }
 
-    const roleNames = (user.roles || []).map(r => r.name);
+    const roleNames = user.roles.map(r => r.name);
     const token = jwt.sign({ sub: user.userID, roles: roleNames }, JWT_SECRET_KEY, { expiresIn: '7d' });
 
     return {

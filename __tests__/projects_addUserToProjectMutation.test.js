@@ -8,6 +8,8 @@ const {
   db,
 } = require('./helpers');
 
+const addUserToProjectResolver = require('../graphql/mutations/addUserToProjectMutation');
+
 const addUserToProjectMutation = `
   mutation AddUserToProject($input: AddUserToProjectInput!) {
     addUserToProject(input: $input)
@@ -162,5 +164,32 @@ describe('projects_addUserToProjectMutation', () => {
     });
 
     expect(result.errors[0].message).toBe('User is already assigned to this project');
+  });
+
+  test('addUserToProjectAllValidDirectArgs', async () => {
+    const project = await createProject({ name: 'AssignProjectArgs' });
+    const user = await createUser({
+      email: 'assignargs@example.com',
+      password: 'Pass123!',
+      username: 'assignargs',
+    });
+
+    expect(project.projectID).toBe(1);
+    expect(user.userID).toBe(1);
+
+    const admin = await createUserWithRoles({
+      email: 'adminargs2@example.com',
+      password: 'Pass123!',
+      username: 'adminargs2',
+      roles: ['Admin'],
+    });
+
+    const result = await addUserToProjectResolver.resolve(
+      null,
+      { projectID: project.projectID, userID: user.userID },
+      { user: buildContextUser(admin) }
+    );
+
+    expect(result).toBe(true);
   });
 });
