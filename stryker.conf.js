@@ -1,11 +1,16 @@
 module.exports = {
   mutate: [
-    'graphql/mutations/**/*user*.js',
-    'graphql/mutations/**/*project*.js',
-    'graphql/queries/**/*user*.js',
-    'graphql/queries/**/*project*.js',
-    'utils/authorize.js',
-    'middlewares/jwtMiddleware.js',
+    // for users
+    'graphql/mutations/loginMutation.js',
+    'graphql/mutations/registerMutation.js',
+    'graphql/mutations/addRoleToUserMutation.js',
+
+    // for projects
+    'graphql/mutations/createProjectMutation.js',
+    'graphql/mutations/updateProjectMutation.js',
+    'graphql/mutations/deleteProjectMutation.js',
+    'graphql/mutations/removeUserFromProjectMutation.js',
+    'graphql/mutations/addUserToProjectMutation.js',
   ],
   testRunner: 'jest',
   jest: {

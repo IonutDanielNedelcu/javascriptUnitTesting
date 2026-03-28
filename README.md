@@ -576,7 +576,40 @@ Note: test cases are derived by combining exactly one choice from each category.
          - removeUserFromProjectAllValid, removeUserFromProjectNonAdmin, removeUserFromProjectLinkNotFound
 
 
+### 3.4 Control Flow and Coverage Metrics
+We used Jest's coverage option (--coverage) to instrument the code and produce a summary plus an HTML report under ./coverage.
+The report shows per-file and total percentages for statements, branches, functions, and lines, and highlights uncovered lines.
+Coverage summary (./coverage): Statements 100% (219/219), Branches 100% (136/136), Functions 100% (10/10), Lines 100% (198/198).
 
+#### 3.4.1 Statement Coverage 
+Definition: percentage of executable statements that run at least once.
+How we used it: we ran Jest with coverage (npm run test:coverage) and ensured each mutation has tests that execute the success path and each validation/error statement, reaching 100% statements.
+
+#### 3.4.2 Decision (Branch) Coverage
+Definition: percentage of decision outcomes (true/false for if/else and ternary branches) that are both taken.
+How we used it: tests include valid and invalid inputs plus authorization checks so each decision point is exercised in both directions; branches are at 100%.
+
+#### 3.4.3 Condition Coverage
+Definition: percentage of individual boolean conditions inside a decision that evaluate to both true and false.
+How we used it: one-valid-at-a-time cases target each condition separately (length, format, uniqueness, existence), ensuring each sub-condition flips at least once; functions and lines are at 100%.
+
+#### 3.4.4 Independent Paths Analysis
+Definition: a minimal set of distinct execution paths that collectively cover all decision outcomes.
+How we used it: for each mutation we include a success path and one path per unique error/exit, aligned with the category partitioning list.
+Path diagrams are documented in _diagrams.
+
+
+
+## 4. Mutation Testing 
+
+### 4.1 Mutation Generator Setup and Execution
+We use Stryker as the mutation generator, configured in stryker.conf.js and executed via npm run test:mutation.
+Targets include Users/Projects mutations and queries plus authorization and JWT middleware.
+Configuration highlights:
+- Mutate patterns: graphql/mutations/**/*user*.js, graphql/mutations/**/*project*.js, graphql/queries/**/*user*.js, graphql/queries/**/*project*.js, utils/authorize.js, middlewares/jwtMiddleware.js
+- Test runner: Jest (custom project), using jest.config.js
+- Coverage analysis: off (faster, uses existing tests)
+- Reporters: clear-text and HTML (output under reports/mutation/html)
 
 
 ## Functionalities
