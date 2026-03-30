@@ -89,6 +89,16 @@ function parseAuthToken(token) {
   return jwt.verify(token, JWT_SECRET_KEY);
 }
 
+async function createSprint({
+  sprintNumber = 1,
+  description = 'Sprint description',
+  startDate = null,
+  endDate = null,
+  projectID = null,
+} = {}) {
+  return db.Sprint.create({ number: sprintNumber, description, startDate, endDate, projectID });
+}
+
 module.exports = {
   executeGraphql,
   seedBaseData,
@@ -99,6 +109,7 @@ module.exports = {
   createRepository,
   createProject,
   addUserToProject,
+  createSprint,
   parseAuthToken,
   db,
 };

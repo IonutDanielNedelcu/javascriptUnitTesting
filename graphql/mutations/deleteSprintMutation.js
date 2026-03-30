@@ -16,7 +16,7 @@ module.exports = {
       if (!sprint) throw new Error('Sprint not found');
 
       await sprint.destroy();
-      return `Sprint ${sprintID} deleted`;
+      return `Sprint deleted`;
     } catch (err) {
       throw new Error(err.message || 'Failed to delete sprint');
     }

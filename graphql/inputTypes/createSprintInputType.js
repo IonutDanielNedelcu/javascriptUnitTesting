@@ -3,7 +3,7 @@ const { GraphQLInputObjectType, GraphQLInt, GraphQLString } = require('graphql')
 module.exports = new GraphQLInputObjectType({
   name: 'CreateSprintInput',
   fields: {
-    number: { type: GraphQLInt },
+    sprintNumber: { type: GraphQLInt },
     description: { type: GraphQLString },
     startDate: { type: GraphQLString },
     endDate: { type: GraphQLString },

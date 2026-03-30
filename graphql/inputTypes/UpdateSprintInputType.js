@@ -4,7 +4,7 @@ module.exports = new GraphQLInputObjectType({
   name: 'UpdateSprintInput',
   fields: {
     sprintID: { type: GraphQLInt }, 
-    number: { type: GraphQLInt },
+    sprintNumber: { type: GraphQLInt },
     description: { type: GraphQLString },
     startDate: { type: GraphQLString },
     endDate: { type: GraphQLString },

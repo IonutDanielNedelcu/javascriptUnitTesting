@@ -3,22 +3,79 @@ const SprintType = require('../types/sprintType');
 const CreateSprintInput = require('../inputTypes/createSprintInputType');
 const { authorizeRoles } = require('../../utils/authorize');
 const db = require('../../models');
+const { Op } = require('sequelize');
 
 module.exports = {
   type: SprintType,
   args: {
     input: { type: new GraphQLNonNull(CreateSprintInput) },
   },
-  resolve: async (_source, { input }, context) => {
-    // only Admins and Managers can perform this action
+  resolve: async (_source, args, context) => {
+    const input = args.input || args;
+
     authorizeRoles(context, ['Admin', 'Manager']);
+
+    const sprintNumber = input.sprintNumber !== undefined ? Number(input.sprintNumber) : undefined;
+    const description = typeof input.description === 'string' ? input.description.trim() : null;
+    const startDate = input.startDate;
+    const endDate = input.endDate;
+    const projectID = input.projectID || null;
+
+    if (!input.sprintNumber && input.sprintNumber !== 0) {
+      throw new Error('Sprint number is required');
+    }
+    if (!Number.isInteger(sprintNumber) || sprintNumber < 1) {
+      throw new Error('Sprint number must be greater than or equal to 1');
+    }
+
+    if (!startDate) throw new Error('Start date is required');
+    if (!endDate) throw new Error('End date is required');
+
+    const sDate = new Date(startDate);
+    const eDate = new Date(endDate);
+    if (isNaN(sDate.getTime()) || isNaN(eDate.getTime())) {
+      throw new Error('Invalid date format');
+    }
+    if (sDate >= eDate) {
+      throw new Error('Start date must be before end date');
+    }
+
+    if (projectID) {
+      const project = await db.Project.findByPk(projectID);
+      if (!project) throw new Error('Project not found');
+
+      const existingNumber = await db.Sprint.findOne({ where: { projectID, number: sprintNumber } });
+      if (existingNumber) {
+        throw new Error('Sprint number already exists in project');
+      }
+
+      const overlapping = await db.Sprint.findOne({
+        where: {
+          projectID,
+          [Op.or]: [
+            {
+              startDate: { [Op.lte]: endDate },
+              endDate: { [Op.gte]: startDate },
+            },
+          ],
+        },
+      });
+
+      if (overlapping) {
+        throw new Error('Sprint dates overlap with an existing sprint in this project');
+      }
+    }
+
     const sprint = await db.Sprint.create({
-      number: input.number,
-      description: input.description || null,
-      startDate: input.startDate,
-      endDate: input.endDate,
-      projectID: input.projectID || null,
+      number: sprintNumber,
+      description: description || null,
+      startDate,
+      endDate,
+      projectID,
     });
-    return sprint;
+
+    return db.Sprint.findByPk(sprint.sprintID, {
+      include: [{ model: db.Project, as: 'project' }],
+    });
   },
 };
