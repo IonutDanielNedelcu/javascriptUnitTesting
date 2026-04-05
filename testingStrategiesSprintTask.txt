@@ -1,0 +1,171 @@
+3. Testing Strategies and Implementation (Tasks and Sprints)
+
+3.1 Equivalence Class Partitioning (EP)
+  3.1.1 tasksValidClasses
+    - createTaskValidClass
+      files: graphql/mutations/createTaskMutation.js
+      tests: __tests__/tasks_createTaskMutation.test.js -> createTaskAllValid
+    - updateTaskValidClass
+      files: graphql/mutations/updateTaskMutation.js
+      tests: __tests__/tasks_updateTaskMutation.test.js -> updateTaskAllValid
+    - deleteTaskValidClass
+      files: graphql/mutations/deleteTaskMutation.js
+      tests: __tests__/tasks_deleteTaskMutation.test.js -> deleteTaskAllValid
+    - assignTaskValidClass
+      files: graphql/mutations/updateTaskMutation.js, graphql/mutations/createTaskMutation.js, graphql/mutations/assignTaskMutation.js
+      tests: __tests__/tasks_assignTaskMutation.test.js -> assignTaskAllValid
+    - changeTaskStatusValidClass
+      files: graphql/mutations/updateTaskMutation.js, graphql/mutations/changeTaskStatusMutation.js
+      tests: __tests__/tasks_status.test.js -> statusTransitionValid
+  3.1.2 tasksInvalidClasses
+    - createTaskMissingNameClass
+      files: graphql/mutations/createTaskMutation.js
+      tests: __tests__/tasks_createTaskMutation.test.js -> createTaskMissingName
+    - createTaskMissingDescriptionClass
+      files: graphql/mutations/createTaskMutation.js
+      tests: __tests__/tasks_createTaskMutation.test.js -> createTaskMissingDescription
+    - createTaskNameTooLongClass
+      files: graphql/mutations/createTaskMutation.js
+      tests: __tests__/tasks_createTaskMutation.test.js -> createTaskNameTooLong
+    - createTaskDescriptionTooLongClass
+      files: graphql/mutations/createTaskMutation.js
+      tests: __tests__/tasks_createTaskMutation.test.js -> createTaskDescriptionTooLong
+    - createTaskAssigneeNotFoundClass
+      files: graphql/mutations/createTaskMutation.js
+      tests: __tests__/tasks_createTaskMutation.test.js -> createTaskAssigneeNotFound
+    - createTaskProjectNotFoundClass
+      files: graphql/mutations/createTaskMutation.js
+      tests: __tests__/tasks_createTaskMutation.test.js -> createTaskProjectNotFound
+    - createTaskSprintNotFoundClass
+      files: graphql/mutations/createTaskMutation.js
+      tests: __tests__/tasks_createTaskMutation.test.js -> createTaskSprintNotFound
+    - createTaskMissingProjectClass
+      files: graphql/mutations/createTaskMutation.js
+      tests: __tests__/tasks_createTaskMutation.test.js -> createTaskMissingProject
+    - createTaskInvalidStatusClass
+      files: graphql/mutations/createTaskMutation.js
+      tests: __tests__/tasks_createTaskMutation.test.js -> createTaskInvalidStatus
+    - assignTaskNotAuthenticatedClass
+      files: graphql/mutations/assignTaskMutation.js
+      tests: __tests__/tasks_assignTaskMutation.test.js -> assignTaskNotAuthenticated
+    - assignTaskMissingUsernameClass
+      files: graphql/mutations/assignTaskMutation.js
+      tests: __tests__/tasks_assignTaskMutation.test.js -> assignTaskMissingAssigneeUsername
+    - assignTaskAssigneeNotFoundClass
+      files: graphql/mutations/assignTaskMutation.js
+      tests: __tests__/tasks_assignTaskMutation.test.js -> assignTaskAssigneeNotFound
+    - assignTaskTaskNotFoundClass
+      files: graphql/mutations/assignTaskMutation.js
+      tests: __tests__/tasks_assignTaskMutation.test.js -> assignTaskTaskNotFound
+    - changeTaskStatusNotAuthenticatedClass
+      files: graphql/mutations/changeTaskStatusMutation.js
+      tests: __tests__/tasks_changeTaskStatusMutation.test.js -> (new) not authenticated
+    - changeTaskStatusTaskNotFoundClass
+      files: graphql/mutations/changeTaskStatusMutation.js
+      tests: __tests__/tasks_changeTaskStatusMutation.test.js -> (new) task not found
+    - changeTaskStatusMissingStatusClass
+      files: graphql/mutations/changeTaskStatusMutation.js
+      tests: __tests__/tasks_changeTaskStatusMutation.test.js -> statusTransitionMissingStatus
+    - changeTaskStatusInvalidStatusClass
+      files: graphql/mutations/changeTaskStatusMutation.js
+      tests: __tests__/tasks_changeTaskStatusMutation.test.js -> statusTransitionInvalidStatus
+    - updateTaskNotAuthenticatedClass
+      files: graphql/mutations/updateTaskMutation.js
+      tests: __tests__/tasks_updateTaskMutation.test.js -> updateTaskNotAuthenticated
+    - updateTaskNonExistingTaskClass
+      files: graphql/mutations/updateTaskMutation.js
+      tests: __tests__/tasks_updateTaskMutation.test.js -> updateTaskNotFound
+    - updateTaskAssigneeNullClass
+      files: graphql/mutations/updateTaskMutation.js
+      tests: __tests__/tasks_updateTaskMutation.test.js -> updateTaskAssigneeCannotBeNull
+    - updateTaskAssigneeNotFoundClass
+      files: graphql/mutations/updateTaskMutation.js
+      tests: __tests__/tasks_updateTaskMutation.test.js -> updateTaskAssigneeNotFound
+    - updateTaskProjectNullClass
+      files: graphql/mutations/updateTaskMutation.js
+      tests: __tests__/tasks_updateTaskMutation.test.js -> updateTaskProjectCannotBeNull
+    - updateTaskProjectNotFoundClass
+      files: graphql/mutations/updateTaskMutation.js
+      tests: __tests__/tasks_updateTaskMutation.test.js -> updateTaskProjectNotFound
+    - updateTaskSprintNotFoundClass
+      files: graphql/mutations/updateTaskMutation.js
+      tests: __tests__/tasks_updateTaskMutation.test.js -> updateTaskSprintNotFound
+    - updateTaskNameEmptyClass
+      files: graphql/mutations/updateTaskMutation.js
+      tests: __tests__/tasks_updateTaskMutation.test.js -> updateTaskInvalidName
+    - updateTaskNameTooLongClass
+      files: graphql/mutations/updateTaskMutation.js
+      tests: __tests__/tasks_updateTaskMutation.test.js -> updateTaskNameTooLong
+    - updateTaskDescriptionEmptyClass
+      files: graphql/mutations/updateTaskMutation.js
+      tests: __tests__/tasks_updateTaskMutation.test.js -> updateTaskDescriptionRequired
+    - updateTaskDescriptionTooLongClass
+      files: graphql/mutations/updateTaskMutation.js
+      tests: __tests__/tasks_updateTaskMutation.test.js -> updateTaskDescriptionTooLong
+    - updateTaskInvalidStatusClass
+      files: graphql/mutations/updateTaskMutation.js
+      tests: __tests__/tasks_updateTaskMutation.test.js -> updateTaskInvalidStatus
+  3.1.3 sprintsValidClasses
+    - createSprintValidClass
+      files: graphql/mutations/createSprintMutation.js
+      related: graphql/inputTypes/createSprintInputType.js, models/sprint.js, models/project.js
+    - updateSprintValidClass
+      files: graphql/mutations/updateSprintMutation.js
+    - deleteSprintMutation
+      files: graphql/mutations/deleteSprintMutation.js
+  3.1.4 sprintsInvalidClasses
+    - createSprintDuplicateNumberInProjectClass
+      files: graphql/mutations/createSprintMutation.js
+    - createSprintMissingFieldsClass
+      files: graphql/mutations/createSprintMutation.js
+    - createSprintInvalidSprintNumber
+      files: graphql/mutations/createSprintMutation.js, graphql/mutations/updateSprintMutation.js
+    - createSprintInvalidDatesClass
+      files: graphql/mutations/createSprintMutation.js, graphql/mutations/updateSprintMutation.js
+    - createSprintInvalidDateFormatClass
+      files: graphql/mutations/createSprintMutation.js
+    - createSprintStartDateEmptyClass
+      files: graphql/mutations/createSprintMutation.js
+    - createSprintEndDateEmptyClass
+      files: graphql/mutations/createSprintMutation.js
+    - createSprintProjectNotFoundClass
+      files: graphql/mutations/createSprintMutation.js
+    - createSprintAuthorizationClass
+      files: graphql/mutations/createSprintMutation.js
+    - updateSprintWithNonExistingProjectClass
+      files: graphql/mutations/updateSprintMutation.js
+    - updateSprintNonExistingSprintClass
+      files: graphql/mutations/updateSprintMutation.js
+    - updateSprintAuthorizationClass
+      files: graphql/mutations/updateSprintMutation.js, graphql/mutations/createSprintMutation.js, graphql/mutations/deleteSprintMutation.js
+    - updateSprintInvalidDateFormatClass
+      files: graphql/mutations/updateSprintMutation.js
+    - updateSprintStartDateEmptyClass
+      files: graphql/mutations/updateSprintMutation.js
+    - updateSprintEndDateEmptyClass
+      files: graphql/mutations/updateSprintMutation.js
+    - updateSprintNumberZeroInvalidClass
+      files: graphql/mutations/updateSprintMutation.js
+    - updateSprintDuplicateNumberInProjectClass
+      files: graphql/mutations/updateSprintMutation.js
+    - updateSprintDatesOverlapClass
+      files: graphql/mutations/updateSprintMutation.js
+    - deleteSprintAuthorizationClass
+      files: graphql/mutations/deleteSprintMutation.js
+    - deleteSprintNotFoundClass
+      files: graphql/mutations/deleteSprintMutation.js
+
+
+3. Boundary Value Analysis (BVA)
+  3.1 Tasks
+    - taskTitleLengthBoundary: files: graphql/mutations/createTaskMutation.js; boundary: 0Vs1 and 200Vs201
+    - taskDescriptionLengthBoundary: files: graphql/mutations/createTaskMutation.js; boundary: 0Vs1 and 2000Vs2001
+    - projectIdExistenceBoundary: files: graphql/mutations/createTaskMutation.js; boundary: existingIdVsNonExistingId
+    - assigneeIdExistenceBoundary: files: graphql/mutations/createTaskMutation.js; boundary: existingUserVsNonExistingUser
+    - taskStatusBoundary: files: graphql/mutations/changeTaskStatusMutation.js, graphql/mutations/createTaskMutation.js, graphql/mutations/updateTaskMutation.js; boundary: allowedStatusVsInvalid (e.g. "In Progress" vs "INVALID")
+    - taskStatusMissingBoundary: files: graphql/mutations/changeTaskStatusMutation.js; boundary: nullVsPresent (expect 'Status is required')
+  3.2 Sprints
+    - sprintNumberBoundary: files: graphql/mutations/createSprintMutation.js, graphql/mutations/updateSprintMutation.js; boundary: 0Vs1, non-integer vs integer, duplicateNumberWithinSameProject
+    - sprintStartEndDateBoundary: files: graphql/mutations/createSprintMutation.js, graphql/mutations/updateSprintMutation.js; boundary: startBeforeEnd, equalDates, empty vs present
+    - sprintDurationBoundary: files: graphql/mutations/createSprintMutation.js; boundary: minimalDurationVsZero
+    - sprintDateFormatBoundary: files: graphql/mutations/createSprintMutation.js, graphql/mutations/updateSprintMutation.js; boundary: valid ISO date vs invalid string

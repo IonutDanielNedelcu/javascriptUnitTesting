@@ -16,7 +16,7 @@ module.exports = {
       if (!task) throw new Error('Task not found');
 
       await task.destroy();
-      return `Task ${taskID} deleted`;
+      return `Task deleted`;
     } catch (err) {
       throw new Error(err.message || 'Failed to delete task');
     }

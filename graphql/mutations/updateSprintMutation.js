@@ -68,23 +68,21 @@ module.exports = {
       }
     }
 
-      if (rawNumber !== undefined && targetProjectID) {
-        const existingNumber = await db.Sprint.findOne({ where: { projectID: targetProjectID, number: sprintNumber } });
-        if (existingNumber && existingNumber.sprintID !== sprint.sprintID) {
-          throw new Error('Sprint number already exists in project');
-        }
+    if (rawNumber !== undefined && targetProjectID) {
+      const existingNumber = await db.Sprint.findOne({ where: { projectID: targetProjectID, number: sprintNumber } });
+      if (existingNumber && existingNumber.sprintID !== sprint.sprintID) {
+        throw new Error('Sprint number already exists in project');
       }
+    }
 
-      await sprint.update({
-        number: rawNumber !== undefined ? sprintNumber : sprint.number,
-        description: input.description !== undefined ? input.description : sprint.description,
-        startDate: input.startDate !== undefined ? input.startDate : sprint.startDate,
-        endDate: input.endDate !== undefined ? input.endDate : sprint.endDate,
-        projectID: input.projectID !== undefined ? input.projectID : sprint.projectID,
-      });
+    await sprint.update({
+      number: rawNumber !== undefined ? sprintNumber : sprint.number,
+      description: input.description !== undefined ? input.description : sprint.description,
+      startDate: input.startDate !== undefined ? input.startDate : sprint.startDate,
+      endDate: input.endDate !== undefined ? input.endDate : sprint.endDate,
+      projectID: input.projectID !== undefined ? input.projectID : sprint.projectID,
+    });
 
-      const plain = sprint.get ? sprint.get({ plain: true }) : sprint;
-      plain.sprintNumber = plain.number;
-      return plain;
+    return sprint;
   },
 };

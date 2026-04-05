@@ -24,7 +24,7 @@ module.exports = {
           throw new Error('Assignee cannot be set to null');
         } else {
           const assignee = await db.User.findOne({ where: { username: input.assigneeUsername } });
-          if (!assignee) throw new Error(`Assignee not found: ${input.assigneeUsername}`);
+          if (!assignee) throw new Error('Assignee not found');
           assigneeUserID = assignee.userID;
         }
       }
@@ -35,7 +35,7 @@ module.exports = {
           throw new Error('Project cannot be set to null');
         } else {
           const project = await db.Project.findOne({ where: { name: input.projectName } });
-          if (!project) throw new Error(`Project not found: ${input.projectName}`);
+          if (!project) throw new Error('Project not found');
           projectID = project.projectID;
         }
       }
@@ -48,15 +48,27 @@ module.exports = {
           const sprintWhere = { number: input.sprintNumber };
           if (projectID) sprintWhere.projectID = projectID;
           const sprint = await db.Sprint.findOne({ where: sprintWhere });
-          if (!sprint) throw new Error(`Sprint not found: ${input.sprintNumber}`);
+          if (!sprint) throw new Error('Sprint not found');
           sprintID = sprint.sprintID;
         }
       }
 
       const updateTask = {};
-      if (input.name !== undefined) updateTask.name = input.name;
-      if (input.description !== undefined) updateTask.description = input.description;
-      if (input.status !== undefined) updateTask.status = input.status;
+      if (input.name !== undefined) {
+        if (String(input.name).trim() === '') throw new Error('Task name is required');
+        if (String(input.name).trim().length > 200) throw new Error('Task name must be at most 200 characters');
+        updateTask.name = String(input.name).trim();
+      }
+      if (input.description !== undefined) {
+        if (input.description === null || String(input.description).trim() === '') throw new Error('Task description is required');
+        if (String(input.description).trim().length > 2000) throw new Error('Task description must be at most 2000 characters');
+        updateTask.description = String(input.description).trim();
+      }
+      if (input.status !== undefined) {
+        const allowedStatuses = ['Open', 'In Progress', 'Done', 'Closed'];
+        if (!allowedStatuses.includes(input.status)) throw new Error('Invalid status');
+        updateTask.status = input.status;
+      }
       if (input.reporterUserID !== undefined) updateTask.reporterUserID = input.reporterUserID;
       if (assigneeUserID !== undefined) updateTask.assigneeUserID = assigneeUserID;
       if (sprintID !== undefined) updateTask.sprintID = sprintID;
@@ -74,6 +86,7 @@ module.exports = {
       includes.push({ model: db.Project, as: 'project', attributes: ['projectID', 'name'] });
 
       const updatedTask = await db.Task.findByPk(task.taskID, { include: includes });
+      
       return updatedTask;
     } catch (err) {
       throw new Error(err.message || 'Failed to update task');

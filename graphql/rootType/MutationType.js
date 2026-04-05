@@ -24,6 +24,8 @@ const deleteSprint = require('../mutations/deleteSprintMutation');
 const createTask = require('../mutations/createTaskMutation');
 const updateTask = require('../mutations/updateTaskMutation');
 const deleteTask = require('../mutations/deleteTaskMutation');
+const assignTask = require('../mutations/assignTaskMutation');
+const changeTaskStatus = require('../mutations/changeTaskStatusMutation');
 const createComment = require('../mutations/createCommentMutation');
 const updateComment = require('../mutations/updateCommentMutation');
 const deleteComment = require('../mutations/deleteCommentMutation');
@@ -57,6 +59,8 @@ const MutationType = new GraphQLObjectType({
     createTask,
     updateTask,
     deleteTask,
+    assignTask,
+    changeTaskStatus,
     createComment,
     updateComment,
     deleteComment,

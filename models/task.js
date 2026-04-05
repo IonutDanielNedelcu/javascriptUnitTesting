@@ -21,10 +21,24 @@ module.exports = (sequelize, DataTypes) => {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
+            set(value) {
+                this.setDataValue('name', value ? String(value).trim() : value);
+            },
+            validate: {
+                notEmpty: true,
+                len: [1, 200],
+            },
         },
         description: {
             type: DataTypes.STRING,
             allowNull: false,
+            set(value) {
+                this.setDataValue('description', value ? String(value).trim() : value);
+            },
+            validate: {
+                notEmpty: true,
+                len: [1, 2000],
+            },
         },
         status: {
             // enum for status

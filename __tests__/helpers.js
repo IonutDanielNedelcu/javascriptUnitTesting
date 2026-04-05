@@ -99,6 +99,18 @@ async function createSprint({
   return db.Sprint.create({ number: sprintNumber, description, startDate, endDate, projectID });
 }
 
+async function createTask({
+  name = 'Task',
+  description = 'Description',
+  status = 'Open',
+  reporterUserID = null,
+  assigneeUserID = null,
+  projectID = null,
+  sprintID = null,
+} = {}) {
+  return db.Task.create({ name, description, status, reporterUserID, assigneeUserID, projectID, sprintID });
+}
+
 module.exports = {
   executeGraphql,
   seedBaseData,
@@ -110,6 +122,7 @@ module.exports = {
   createProject,
   addUserToProject,
   createSprint,
+  createTask,
   parseAuthToken,
   db,
 };
