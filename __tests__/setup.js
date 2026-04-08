@@ -6,6 +6,3 @@ beforeEach(async () => {
   await seedBaseData();
 });
 
-afterAll(async () => {
-  await db.sequelize.close();
-});

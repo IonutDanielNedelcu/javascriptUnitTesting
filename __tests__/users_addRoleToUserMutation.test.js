@@ -5,6 +5,8 @@ const {
   buildContextUser,
 } = require('./helpers');
 
+const db = require('../models');
+
 const addRoleToUserMutation = `
   mutation AddRoleToUser($username: String!, $roleName: String!) {
     addRoleToUser(username: $username, roleName: $roleName) {
@@ -132,4 +134,5 @@ describe('users_addRoleToUserMutation', () => {
 
     expect(result.errors[0].message).toBe('User already has this role');
   });
+
 });

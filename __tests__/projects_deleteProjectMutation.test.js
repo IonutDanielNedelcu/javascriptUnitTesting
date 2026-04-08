@@ -5,6 +5,8 @@ const {
   createProject,
 } = require('./helpers');
 
+const db = require('../models');
+
 const deleteProjectMutation = `
   mutation DeleteProject($projectID: Int!) {
     deleteProject(projectID: $projectID)
@@ -72,4 +74,5 @@ describe('projects_deleteProjectMutation', () => {
 
     expect(result.errors[0].message).toBe('Project not found');
   });
+
 });

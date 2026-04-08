@@ -79,8 +79,9 @@ module.exports = {
     // assign Employee role if it exists
     const employeeRole = await db.Role.findOne({ where: { name: 'Employee' } });
     if (employeeRole) {
-      // create join record if not exists
-      await db.UserRole.findOrCreate({ where: { userID: user.userID, roleID: employeeRole.roleID }, defaults: { userID: user.userID, roleID: employeeRole.roleID } });
+      await db.UserRole.findOrCreate({
+        where: { userID: user.userID, roleID: employeeRole.roleID },
+      });
     }
 
     // reload user with roles for returning

@@ -12,11 +12,18 @@ module.exports = {
     'graphql/mutations/removeUserFromProjectMutation.js',
     'graphql/mutations/addUserToProjectMutation.js',
   ],
+  concurrency: 1,
   testRunner: 'jest',
   jest: {
     projectType: 'custom',
     configFile: 'jest.config.js',
+    config: {
+      forceExit: true,
+    },
   },
-  coverageAnalysis: 'off',
-  reporters: ['clear-text', 'html'],
+  timeoutMS: 45000,
+  timeoutFactor: 3,
+  ignoreStatic: true,
+  coverageAnalysis: 'perTest',
+  reporters: ['progress', 'clear-text', 'html'],
 };
