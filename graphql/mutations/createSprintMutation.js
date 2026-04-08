@@ -11,7 +11,7 @@ module.exports = {
     input: { type: new GraphQLNonNull(CreateSprintInput) },
   },
   resolve: async (_source, args, context) => {
-    const input = args.input || args;
+    const input = args.input;
 
     authorizeRoles(context, ['Admin', 'Manager']);
 

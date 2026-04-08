@@ -16,7 +16,7 @@ const createTaskMutation = `
       status
       reporter { userID }
       assignee { userID }
-      sprint { sprintID }
+      sprint { sprintID  sprintNumber }
       project { projectID }
     }
   }
@@ -31,6 +31,13 @@ describe('tasks_createTaskMutation', () => {
       username: 'creator',
       roles: ['Manager'],
     });
+
+		const assignee = await createUserWithRoles({
+			email: 'assignee@studybuddies.com',
+			password: 'Assignee_123',
+			username: 'assignee',
+			roles: [],
+		});
 
     const project = await createProject({ 
 			name: 'TaskProj1',
@@ -52,6 +59,7 @@ describe('tasks_createTaskMutation', () => {
       status: 'Open',
       projectName: project.name,
       sprintNumber: sprint.sprintNumber,
+			assigneeUsername: assignee.username,
     };
 
     const res = await executeGraphql({ 
@@ -62,6 +70,12 @@ describe('tasks_createTaskMutation', () => {
 
     expect(res.errors).toBeUndefined();
     expect(res.data.createTask.name).toBe('Task name');
+		expect(res.data.createTask.description).toBe('Task description');
+		expect(res.data.createTask.status).toBe('Open');
+		expect(res.data.createTask.reporter.userID).toBe(user.userID);
+		expect(res.data.createTask.assignee.userID).toBe(assignee.userID);
+		expect(res.data.createTask.sprint.sprintNumber).toBe(1);
+		expect(res.data.createTask.project.projectID).toBe(project.projectID);
   });
 
 	// TEST 2
@@ -383,4 +397,76 @@ describe('tasks_createTaskMutation', () => {
 
 		expect(res.errors[0].message).toBe('Invalid status');
   });
+
+	// TEST 11
+	test('createTaskDefaultStatus', async () => {
+		const user = await createUserWithRoles({
+      email: 'creator@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'creator',
+      roles: ['Manager'],
+    });
+
+		const project = await createProject({ 
+			name: 'TaskProj10',
+			description: "Short description",
+			repositoryID: null,
+		});
+
+    const sprint = await createSprint({ 
+			sprintNumber: 1, 
+			description: 'Sprint description',
+			startDate: '2026-01-01', 
+			endDate: '2026-01-14', 
+			projectID: project.projectID 
+		});
+
+		const input = { 
+			name: 'Task name', 
+			description: 'Task description', 
+      projectName: project.name,
+      sprintNumber: sprint.sprintNumber,
+		};
+
+		const res = await executeGraphql({
+			source: createTaskMutation,
+			variableValues: { input },
+			contextUser: buildContextUser(user),
+		});
+
+		expect(res.errors).toBeUndefined();
+		expect(res.data.createTask.status).toBe('Open');
+	});
+
+	// TEST 12
+	test('createTaskWithoutSprintNumber', async () => {
+		const user = await createUserWithRoles({
+			email: 'creator@studybuddies.com',
+			password: 'StudyBuddies_123',
+			username: 'creator',
+			roles: ['Manager'],
+		});
+
+		const project = await createProject({
+			name: 'TaskProj12',
+			description: 'Short description',
+			repositoryID: null,
+		});
+
+		const input = {
+			name: 'Task name',
+			description: 'Task description',
+			status: 'Open',
+			projectName: project.name,
+		};
+
+		const res = await executeGraphql({
+			source: createTaskMutation,
+			variableValues: { input },
+			contextUser: buildContextUser(user),
+		});
+
+		expect(res.errors).toBeUndefined();
+		expect(res.data.createTask.sprint).toBeNull();
+	});
 });

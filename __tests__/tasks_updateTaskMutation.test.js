@@ -31,6 +31,13 @@ describe('tasks_updateTaskMutation', () => {
       roles: ['Manager'],
     });
 
+		const assignee = await createUserWithRoles({
+      email: 'assignee@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'assignee',
+      roles: ['Employee'],
+    });
+
     const oldProject = await createProject({
       name: 'UpdateTaskProj1',
       description: 'Short description',
@@ -66,6 +73,7 @@ describe('tasks_updateTaskMutation', () => {
 			status: 'In Progress', 
 			projectName: newProject.name,
       sprintNumber: sprint.number,  
+			assigneeUsername: assignee.username,
 		};
 
     const res = await executeGraphql({ 
@@ -80,6 +88,7 @@ describe('tasks_updateTaskMutation', () => {
     expect(res.data.updateTask.status).toBe('In Progress');
     expect(res.data.updateTask.project.projectID).toBe(newProject.projectID);
     expect(res.data.updateTask.sprint.sprintID).toBe(sprint.sprintID);
+		expect(res.data.updateTask.assignee.userID).toBe(assignee.userID);
   });
 
   // TEST 2 
@@ -473,5 +482,98 @@ describe('tasks_updateTaskMutation', () => {
 		});
 
 		expect(res.errors[0].message).toBe('Invalid status');
+  });
+
+  // TEST 14
+  test('updateTaskNullSprint', async () => {
+    const manager = await createUserWithRoles({
+      email: 'manager@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'manager',
+      roles: ['Manager'],
+    });
+
+    const project = await createProject({
+      name: 'UpdateTaskProj14',
+      description: 'Short description',
+      repositoryID: null,
+    });
+
+    const sprint = await createSprint({
+      sprintNumber: 1,
+      description: 'Sprint 1',
+      startDate: '2026-01-01',
+      endDate: '2026-01-14',
+      projectID: project.projectID,
+    });
+
+    const task = await createTask({
+      name: 'Task name',
+      description: 'Task description',
+      status: 'Open',
+      reporterUserID: manager.userID,
+      projectID: project.projectID,
+      sprintID: sprint.sprintID,
+    });
+
+    const input = {
+      taskID: task.taskID,
+      sprintNumber: null,
+    };
+
+    const res = await executeGraphql({
+      source: updateTaskMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(manager),
+    });
+
+    expect(res.errors).toBeUndefined();
+    expect(res.data.updateTask.sprint).toBeNull();
+  });
+
+  // TEST 15
+  test('updateTaskNoSprint', async () => {
+    const manager = await createUserWithRoles({
+      email: 'manager@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'manager',
+      roles: ['Manager'],
+    });
+
+    const project = await createProject({
+      name: 'UpdateTaskProj15',
+      description: 'Short description',
+      repositoryID: null,
+    });
+
+    const sprint = await createSprint({
+      sprintNumber: 1,
+      description: 'Sprint 1',
+      startDate: '2026-01-01',
+      endDate: '2026-01-14',
+      projectID: project.projectID,
+    });
+
+    const task = await createTask({
+      name: 'Task name',
+      description: 'Task description',
+      status: 'Open',
+      reporterUserID: manager.userID,
+      projectID: project.projectID,
+      sprintID: sprint.sprintID,
+    });
+
+    const input = {
+      taskID: task.taskID,
+    };
+
+    const res = await executeGraphql({
+      source: updateTaskMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(manager),
+    });
+
+    expect(res.errors).toBeUndefined();
+    expect(res.data.updateTask.sprint.sprintID).toBe(sprint.sprintID);
   });
 });

@@ -96,7 +96,9 @@ async function createSprint({
   endDate = null,
   projectID = null,
 } = {}) {
-  return db.Sprint.create({ number: sprintNumber, description, startDate, endDate, projectID });
+  const sprint = await db.Sprint.create({ number: sprintNumber, description, startDate, endDate, projectID });
+  sprint.sprintNumber = sprint.number;
+  return sprint;
 }
 
 async function createTask({

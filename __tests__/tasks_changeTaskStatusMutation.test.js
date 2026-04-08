@@ -127,4 +127,27 @@ describe('tasks_changeTaskStatusMutation', () => {
     
     expect(res.errors[0].message).toBe('Status is required');
   });
+
+  // TEST 4
+  test('statusTransitionTaskNotFound', async () => {
+    const manager = await createUserWithRoles({
+      email: 'manager@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'manager',
+      roles: ['Manager'],
+    });
+
+    const input = {
+      taskID: 999999,
+      status: 'In Progress',
+    };
+
+    const res = await executeGraphql({
+      source: changeStatusMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(manager),
+    });
+
+    expect(res.errors[0].message).toBe('Task not found');
+  });
 });

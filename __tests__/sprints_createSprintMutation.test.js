@@ -378,4 +378,94 @@ describe('sprints_createSprintMutation', () => {
       
     expect(result.errors[0].message).toBe('Not authorized');
   });
+
+  // TEST 12
+  test('createSprintWithoutProject', async () => {
+    const manager = await createUserWithRoles({
+      email: 'manager@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'manager',
+      roles: ['Manager'],
+    });
+
+    const input = {
+      sprintNumber: 1,
+      description: 'Sprint description',
+      startDate: '2026-01-01',
+      endDate: '2026-01-14',
+    }; 
+
+    const result = await executeGraphql({
+      source: createSprintMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(manager),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.createSprint.project).toBeNull();
+  });
+
+  // TEST 13
+  test('createSprintNegativeNumber', async () => {
+    const manager = await createUserWithRoles({
+      email: 'manager@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'manager',
+      roles: ['Manager'],
+    });
+
+    const project = await createProject({ 
+      name: 'CreateSprintProj13',
+      description: 'Short description',
+      repositoryID: null,
+    });
+
+    const input = {
+      sprintNumber: -1,
+      description: 'Sprint description',
+      startDate: '2026-01-01',
+      endDate: '2026-01-14',
+      projectID: project.projectID,
+    };  
+
+    const result = await executeGraphql({
+      source: createSprintMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(manager),
+    });
+
+    expect(result.errors[0].message).toBe('Sprint number must be greater than or equal to 1');
+  });
+
+  // TEST 14
+  test('createSprintWithoutDescription', async () => {
+    const manager = await createUserWithRoles({
+      email: 'manager@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'manager',
+      roles: ['Manager'],
+    });
+
+    const project = await createProject({ 
+      name: 'CreateSprintProj14',
+      description: 'Short description',
+      repositoryID: null,
+    });
+
+    const input = {
+      sprintNumber: 1,
+      startDate: '2026-01-01',
+      endDate: '2026-01-14',
+      projectID: project.projectID,
+    };
+
+    const result = await executeGraphql({
+      source: createSprintMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(manager),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.createSprint.description).toBeNull();
+  });
 });

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1774532352957" clover="3.2.0">
-  <project timestamp="1774532352957" name="All files">
-    <metrics statements="198" coveredstatements="198" conditionals="136" coveredconditionals="136" methods="10" coveredmethods="10" elements="344" coveredelements="344" complexity="0" loc="198" ncloc="198" packages="1" files="8" classes="8"/>
-    <file name="addRoleToUserMutation.js" path="D:\University\An3Sem2\TSS\javascriptUnitTesting\graphql\mutations\addRoleToUserMutation.js">
+<coverage generated="1775687897566" clover="3.2.0">
+  <project timestamp="1775687897566" name="All files">
+    <metrics statements="416" coveredstatements="416" conditionals="331" coveredconditionals="331" methods="18" coveredmethods="18" elements="765" coveredelements="765" complexity="0" loc="416" ncloc="416" packages="1" files="16" classes="16"/>
+    <file name="addRoleToUserMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\addRoleToUserMutation.js">
       <metrics statements="15" coveredstatements="15" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
-      <line num="1" count="8" type="stmt"/>
-      <line num="2" count="8" type="stmt"/>
-      <line num="3" count="8" type="stmt"/>
-      <line num="4" count="8" type="stmt"/>
-      <line num="6" count="8" type="stmt"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="4" count="16" type="stmt"/>
+      <line num="6" count="16" type="stmt"/>
       <line num="14" count="5" type="stmt"/>
       <line num="16" count="4" type="stmt"/>
       <line num="17" count="4" type="cond" truecount="2" falsecount="0"/>
@@ -20,13 +20,13 @@
       <line num="28" count="1" type="stmt"/>
       <line num="29" count="1" type="stmt"/>
     </file>
-    <file name="addUserToProjectMutation.js" path="D:\University\An3Sem2\TSS\javascriptUnitTesting\graphql\mutations\addUserToProjectMutation.js">
+    <file name="addUserToProjectMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\addUserToProjectMutation.js">
       <metrics statements="17" coveredstatements="17" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
-      <line num="1" count="8" type="stmt"/>
-      <line num="2" count="8" type="stmt"/>
-      <line num="3" count="8" type="stmt"/>
-      <line num="4" count="8" type="stmt"/>
-      <line num="6" count="8" type="stmt"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="4" count="16" type="stmt"/>
+      <line num="6" count="16" type="stmt"/>
       <line num="12" count="6" type="cond" truecount="2" falsecount="0"/>
       <line num="13" count="6" type="stmt"/>
       <line num="14" count="6" type="stmt"/>
@@ -40,17 +40,50 @@
       <line num="30" count="2" type="stmt"/>
       <line num="32" count="2" type="stmt"/>
     </file>
-    <file name="createProjectMutation.js" path="D:\University\An3Sem2\TSS\javascriptUnitTesting\graphql\mutations\createProjectMutation.js">
+    <file name="assignTaskMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\assignTaskMutation.js">
+      <metrics statements="13" coveredstatements="13" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="4" count="16" type="stmt"/>
+      <line num="6" count="16" type="stmt"/>
+      <line num="12" count="4" type="stmt"/>
+      <line num="13" count="4" type="cond" truecount="2" falsecount="0"/>
+      <line num="15" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="17" count="2" type="stmt"/>
+      <line num="18" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="20" count="1" type="stmt"/>
+      <line num="22" count="1" type="stmt"/>
+      <line num="29" count="1" type="stmt"/>
+    </file>
+    <file name="changeTaskStatusMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\changeTaskStatusMutation.js">
+      <metrics statements="14" coveredstatements="14" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="4" count="16" type="stmt"/>
+      <line num="6" count="16" type="stmt"/>
+      <line num="12" count="4" type="stmt"/>
+      <line num="13" count="4" type="cond" truecount="2" falsecount="0"/>
+      <line num="15" count="3" type="cond" truecount="4" falsecount="0"/>
+      <line num="16" count="1" type="stmt"/>
+      <line num="19" count="2" type="stmt"/>
+      <line num="20" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="22" count="1" type="stmt"/>
+      <line num="24" count="1" type="stmt"/>
+      <line num="31" count="1" type="stmt"/>
+    </file>
+    <file name="createProjectMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\createProjectMutation.js">
       <metrics statements="32" coveredstatements="32" conditionals="28" coveredconditionals="28" methods="1" coveredmethods="1"/>
-      <line num="1" count="8" type="stmt"/>
-      <line num="2" count="8" type="stmt"/>
-      <line num="3" count="8" type="stmt"/>
-      <line num="4" count="8" type="stmt"/>
-      <line num="5" count="8" type="stmt"/>
-      <line num="7" count="8" type="stmt"/>
-      <line num="8" count="8" type="stmt"/>
-      <line num="9" count="8" type="stmt"/>
-      <line num="11" count="8" type="stmt"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="4" count="16" type="stmt"/>
+      <line num="5" count="16" type="stmt"/>
+      <line num="7" count="16" type="stmt"/>
+      <line num="8" count="16" type="stmt"/>
+      <line num="9" count="16" type="stmt"/>
+      <line num="11" count="16" type="stmt"/>
       <line num="17" count="12" type="cond" truecount="2" falsecount="0"/>
       <line num="18" count="12" type="cond" truecount="2" falsecount="0"/>
       <line num="19" count="12" type="stmt"/>
@@ -75,33 +108,142 @@
       <line num="48" count="4" type="stmt"/>
       <line num="54" count="4" type="stmt"/>
     </file>
-    <file name="deleteProjectMutation.js" path="D:\University\An3Sem2\TSS\javascriptUnitTesting\graphql\mutations\deleteProjectMutation.js">
+    <file name="createSprintMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\createSprintMutation.js">
+      <metrics statements="37" coveredstatements="37" conditionals="34" coveredconditionals="34" methods="1" coveredmethods="1"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="4" count="16" type="stmt"/>
+      <line num="5" count="16" type="stmt"/>
+      <line num="6" count="16" type="stmt"/>
+      <line num="8" count="16" type="stmt"/>
+      <line num="14" count="14" type="stmt"/>
+      <line num="16" count="14" type="stmt"/>
+      <line num="18" count="13" type="cond" truecount="2" falsecount="0"/>
+      <line num="19" count="13" type="cond" truecount="2" falsecount="0"/>
+      <line num="20" count="13" type="stmt"/>
+      <line num="21" count="13" type="stmt"/>
+      <line num="22" count="13" type="cond" truecount="2" falsecount="0"/>
+      <line num="24" count="13" type="cond" truecount="4" falsecount="0"/>
+      <line num="25" count="1" type="stmt"/>
+      <line num="27" count="12" type="cond" truecount="4" falsecount="0"/>
+      <line num="28" count="2" type="stmt"/>
+      <line num="31" count="10" type="cond" truecount="2" falsecount="0"/>
+      <line num="32" count="9" type="cond" truecount="2" falsecount="0"/>
+      <line num="34" count="8" type="stmt"/>
+      <line num="35" count="8" type="stmt"/>
+      <line num="36" count="8" type="cond" truecount="4" falsecount="0"/>
+      <line num="37" count="1" type="stmt"/>
+      <line num="39" count="7" type="cond" truecount="2" falsecount="0"/>
+      <line num="40" count="1" type="stmt"/>
+      <line num="43" count="6" type="cond" truecount="2" falsecount="0"/>
+      <line num="44" count="5" type="stmt"/>
+      <line num="45" count="5" type="cond" truecount="2" falsecount="0"/>
+      <line num="47" count="4" type="stmt"/>
+      <line num="48" count="4" type="cond" truecount="2" falsecount="0"/>
+      <line num="49" count="1" type="stmt"/>
+      <line num="52" count="3" type="stmt"/>
+      <line num="64" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="65" count="1" type="stmt"/>
+      <line num="69" count="3" type="stmt"/>
+      <line num="77" count="3" type="stmt"/>
+    </file>
+    <file name="createTaskMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\createTaskMutation.js">
+      <metrics statements="42" coveredstatements="42" conditionals="37" coveredconditionals="37" methods="1" coveredmethods="1"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="4" count="16" type="stmt"/>
+      <line num="5" count="16" type="stmt"/>
+      <line num="7" count="16" type="stmt"/>
+      <line num="13" count="12" type="stmt"/>
+      <line num="14" count="12" type="stmt"/>
+      <line num="17" count="12" type="cond" truecount="5" falsecount="0"/>
+      <line num="18" count="11" type="stmt"/>
+      <line num="19" count="11" type="cond" truecount="2" falsecount="0"/>
+      <line num="21" count="10" type="cond" truecount="5" falsecount="0"/>
+      <line num="22" count="9" type="stmt"/>
+      <line num="23" count="9" type="cond" truecount="2" falsecount="0"/>
+      <line num="25" count="8" type="stmt"/>
+      <line num="26" count="8" type="cond" truecount="4" falsecount="0"/>
+      <line num="28" count="7" type="stmt"/>
+      <line num="29" count="7" type="cond" truecount="2" falsecount="0"/>
+      <line num="30" count="2" type="stmt"/>
+      <line num="31" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="32" count="1" type="stmt"/>
+      <line num="35" count="6" type="stmt"/>
+      <line num="36" count="6" type="cond" truecount="5" falsecount="0"/>
+      <line num="37" count="1" type="stmt"/>
+      <line num="39" count="5" type="stmt"/>
+      <line num="40" count="5" type="cond" truecount="2" falsecount="0"/>
+      <line num="41" count="4" type="stmt"/>
+      <line num="44" count="4" type="stmt"/>
+      <line num="45" count="4" type="cond" truecount="4" falsecount="0"/>
+      <line num="46" count="3" type="stmt"/>
+      <line num="47" count="3" type="stmt"/>
+      <line num="48" count="3" type="stmt"/>
+      <line num="49" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="50" count="2" type="stmt"/>
+      <line num="53" count="3" type="stmt"/>
+      <line num="64" count="3" type="stmt"/>
+      <line num="65" count="3" type="stmt"/>
+      <line num="66" count="3" type="stmt"/>
+      <line num="67" count="3" type="stmt"/>
+      <line num="68" count="3" type="stmt"/>
+      <line num="70" count="3" type="stmt"/>
+      <line num="71" count="3" type="stmt"/>
+    </file>
+    <file name="deleteProjectMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\deleteProjectMutation.js">
       <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
-      <line num="1" count="8" type="stmt"/>
-      <line num="2" count="8" type="stmt"/>
-      <line num="3" count="8" type="stmt"/>
-      <line num="5" count="8" type="stmt"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="5" count="16" type="stmt"/>
       <line num="11" count="3" type="stmt"/>
       <line num="13" count="2" type="stmt"/>
       <line num="14" count="2" type="cond" truecount="2" falsecount="0"/>
       <line num="16" count="1" type="stmt"/>
       <line num="18" count="1" type="stmt"/>
     </file>
-    <file name="loginMutation.js" path="D:\University\An3Sem2\TSS\javascriptUnitTesting\graphql\mutations\loginMutation.js">
+    <file name="deleteSprintMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\deleteSprintMutation.js">
+      <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="5" count="16" type="stmt"/>
+      <line num="11" count="3" type="stmt"/>
+      <line num="13" count="2" type="stmt"/>
+      <line num="14" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="16" count="1" type="stmt"/>
+      <line num="17" count="1" type="stmt"/>
+    </file>
+    <file name="deleteTaskMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\deleteTaskMutation.js">
+      <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="5" count="16" type="stmt"/>
+      <line num="11" count="3" type="stmt"/>
+      <line num="13" count="2" type="stmt"/>
+      <line num="14" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="16" count="1" type="stmt"/>
+      <line num="17" count="1" type="stmt"/>
+    </file>
+    <file name="loginMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\loginMutation.js">
       <metrics statements="31" coveredstatements="31" conditionals="22" coveredconditionals="22" methods="2" coveredmethods="2"/>
-      <line num="1" count="8" type="stmt"/>
-      <line num="2" count="8" type="stmt"/>
-      <line num="3" count="8" type="stmt"/>
-      <line num="5" count="8" type="stmt"/>
-      <line num="6" count="8" type="stmt"/>
-      <line num="7" count="8" type="stmt"/>
-      <line num="8" count="8" type="stmt"/>
-      <line num="10" count="8" type="stmt"/>
-      <line num="11" count="8" type="stmt"/>
-      <line num="12" count="8" type="stmt"/>
-      <line num="13" count="8" type="stmt"/>
-      <line num="14" count="8" type="stmt"/>
-      <line num="16" count="8" type="stmt"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="5" count="16" type="stmt"/>
+      <line num="6" count="16" type="stmt"/>
+      <line num="7" count="16" type="stmt"/>
+      <line num="8" count="16" type="stmt"/>
+      <line num="10" count="16" type="stmt"/>
+      <line num="11" count="16" type="stmt"/>
+      <line num="12" count="16" type="stmt"/>
+      <line num="13" count="16" type="stmt"/>
+      <line num="14" count="16" type="stmt"/>
+      <line num="16" count="16" type="stmt"/>
       <line num="22" count="10" type="cond" truecount="2" falsecount="0"/>
       <line num="23" count="10" type="cond" truecount="2" falsecount="0"/>
       <line num="25" count="10" type="cond" truecount="2" falsecount="0"/>
@@ -121,25 +263,25 @@
       <line num="47" count="1" type="stmt"/>
       <line num="49" count="1" type="stmt"/>
     </file>
-    <file name="registerMutation.js" path="D:\University\An3Sem2\TSS\javascriptUnitTesting\graphql\mutations\registerMutation.js">
+    <file name="registerMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\registerMutation.js">
       <metrics statements="54" coveredstatements="54" conditionals="48" coveredconditionals="48" methods="2" coveredmethods="2"/>
-      <line num="1" count="8" type="stmt"/>
-      <line num="2" count="8" type="stmt"/>
-      <line num="3" count="8" type="stmt"/>
-      <line num="5" count="8" type="stmt"/>
-      <line num="6" count="8" type="stmt"/>
-      <line num="7" count="8" type="stmt"/>
-      <line num="8" count="8" type="stmt"/>
-      <line num="10" count="8" type="stmt"/>
-      <line num="11" count="8" type="stmt"/>
-      <line num="12" count="8" type="stmt"/>
-      <line num="13" count="8" type="stmt"/>
-      <line num="14" count="8" type="stmt"/>
-      <line num="15" count="8" type="stmt"/>
-      <line num="16" count="8" type="stmt"/>
-      <line num="17" count="8" type="stmt"/>
-      <line num="18" count="8" type="stmt"/>
-      <line num="20" count="8" type="stmt"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="5" count="16" type="stmt"/>
+      <line num="6" count="16" type="stmt"/>
+      <line num="7" count="16" type="stmt"/>
+      <line num="8" count="16" type="stmt"/>
+      <line num="10" count="16" type="stmt"/>
+      <line num="11" count="16" type="stmt"/>
+      <line num="12" count="16" type="stmt"/>
+      <line num="13" count="16" type="stmt"/>
+      <line num="14" count="16" type="stmt"/>
+      <line num="15" count="16" type="stmt"/>
+      <line num="16" count="16" type="stmt"/>
+      <line num="17" count="16" type="stmt"/>
+      <line num="18" count="16" type="stmt"/>
+      <line num="20" count="16" type="stmt"/>
       <line num="26" count="20" type="cond" truecount="2" falsecount="0"/>
       <line num="27" count="20" type="cond" truecount="2" falsecount="0"/>
       <line num="28" count="20" type="cond" truecount="2" falsecount="0"/>
@@ -178,13 +320,13 @@
       <line num="91" count="2" type="stmt"/>
       <line num="93" count="2" type="stmt"/>
     </file>
-    <file name="removeUserFromProjectMutation.js" path="D:\University\An3Sem2\TSS\javascriptUnitTesting\graphql\mutations\removeUserFromProjectMutation.js">
+    <file name="removeUserFromProjectMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\removeUserFromProjectMutation.js">
       <metrics statements="11" coveredstatements="11" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
-      <line num="1" count="8" type="stmt"/>
-      <line num="2" count="8" type="stmt"/>
-      <line num="3" count="8" type="stmt"/>
-      <line num="4" count="8" type="stmt"/>
-      <line num="6" count="8" type="stmt"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="4" count="16" type="stmt"/>
+      <line num="6" count="16" type="stmt"/>
       <line num="12" count="3" type="stmt"/>
       <line num="13" count="3" type="stmt"/>
       <line num="15" count="2" type="stmt"/>
@@ -192,17 +334,17 @@
       <line num="20" count="1" type="stmt"/>
       <line num="23" count="1" type="stmt"/>
     </file>
-    <file name="updateProjectMutation.js" path="D:\University\An3Sem2\TSS\javascriptUnitTesting\graphql\mutations\updateProjectMutation.js">
+    <file name="updateProjectMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\updateProjectMutation.js">
       <metrics statements="29" coveredstatements="29" conditionals="20" coveredconditionals="20" methods="1" coveredmethods="1"/>
-      <line num="1" count="8" type="stmt"/>
-      <line num="2" count="8" type="stmt"/>
-      <line num="3" count="8" type="stmt"/>
-      <line num="4" count="8" type="stmt"/>
-      <line num="5" count="8" type="stmt"/>
-      <line num="7" count="8" type="stmt"/>
-      <line num="8" count="8" type="stmt"/>
-      <line num="9" count="8" type="stmt"/>
-      <line num="11" count="8" type="stmt"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="4" count="16" type="stmt"/>
+      <line num="5" count="16" type="stmt"/>
+      <line num="7" count="16" type="stmt"/>
+      <line num="8" count="16" type="stmt"/>
+      <line num="9" count="16" type="stmt"/>
+      <line num="11" count="16" type="stmt"/>
       <line num="17" count="9" type="stmt"/>
       <line num="18" count="9" type="stmt"/>
       <line num="20" count="8" type="stmt"/>
@@ -223,6 +365,106 @@
       <line num="42" count="2" type="cond" truecount="2" falsecount="0"/>
       <line num="45" count="2" type="stmt"/>
       <line num="47" count="2" type="stmt"/>
+    </file>
+    <file name="updateSprintMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\updateSprintMutation.js">
+      <metrics statements="39" coveredstatements="39" conditionals="62" coveredconditionals="62" methods="1" coveredmethods="1"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="4" count="16" type="stmt"/>
+      <line num="5" count="16" type="stmt"/>
+      <line num="7" count="16" type="stmt"/>
+      <line num="14" count="14" type="stmt"/>
+      <line num="16" count="13" type="stmt"/>
+      <line num="17" count="13" type="cond" truecount="2" falsecount="0"/>
+      <line num="19" count="12" type="cond" truecount="2" falsecount="0"/>
+      <line num="20" count="12" type="cond" truecount="2" falsecount="0"/>
+      <line num="22" count="12" type="cond" truecount="2" falsecount="0"/>
+      <line num="23" count="4" type="cond" truecount="4" falsecount="0"/>
+      <line num="24" count="1" type="stmt"/>
+      <line num="28" count="11" type="cond" truecount="4" falsecount="0"/>
+      <line num="30" count="11" type="cond" truecount="4" falsecount="0"/>
+      <line num="31" count="9" type="stmt"/>
+      <line num="32" count="9" type="cond" truecount="2" falsecount="0"/>
+      <line num="35" count="10" type="cond" truecount="2" falsecount="0"/>
+      <line num="36" count="10" type="cond" truecount="2" falsecount="0"/>
+      <line num="38" count="10" type="cond" truecount="4" falsecount="0"/>
+      <line num="39" count="8" type="cond" truecount="2" falsecount="0"/>
+      <line num="40" count="7" type="cond" truecount="2" falsecount="0"/>
+      <line num="42" count="6" type="stmt"/>
+      <line num="43" count="6" type="stmt"/>
+      <line num="44" count="6" type="cond" truecount="4" falsecount="0"/>
+      <line num="45" count="1" type="stmt"/>
+      <line num="47" count="5" type="cond" truecount="2" falsecount="0"/>
+      <line num="48" count="1" type="stmt"/>
+      <line num="51" count="4" type="cond" truecount="2" falsecount="0"/>
+      <line num="52" count="2" type="stmt"/>
+      <line num="65" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="66" count="1" type="stmt"/>
+      <line num="71" count="5" type="cond" truecount="4" falsecount="0"/>
+      <line num="72" count="3" type="stmt"/>
+      <line num="73" count="3" type="cond" truecount="4" falsecount="0"/>
+      <line num="74" count="1" type="stmt"/>
+      <line num="78" count="4" type="stmt"/>
+      <line num="86" count="4" type="stmt"/>
+    </file>
+    <file name="updateTaskMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\updateTaskMutation.js">
+      <metrics statements="55" coveredstatements="55" conditionals="44" coveredconditionals="44" methods="1" coveredmethods="1"/>
+      <line num="1" count="16" type="stmt"/>
+      <line num="2" count="16" type="stmt"/>
+      <line num="3" count="16" type="stmt"/>
+      <line num="4" count="16" type="stmt"/>
+      <line num="6" count="16" type="stmt"/>
+      <line num="12" count="14" type="stmt"/>
+      <line num="13" count="14" type="cond" truecount="2" falsecount="0"/>
+      <line num="19" count="13" type="stmt"/>
+      <line num="20" count="13" type="cond" truecount="2" falsecount="0"/>
+      <line num="21" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="22" count="1" type="stmt"/>
+      <line num="24" count="2" type="stmt"/>
+      <line num="25" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="26" count="1" type="stmt"/>
+      <line num="30" count="11" type="stmt"/>
+      <line num="31" count="11" type="cond" truecount="2" falsecount="0"/>
+      <line num="32" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="33" count="1" type="stmt"/>
+      <line num="35" count="2" type="stmt"/>
+      <line num="36" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="37" count="1" type="stmt"/>
+      <line num="41" count="9" type="stmt"/>
+      <line num="42" count="9" type="cond" truecount="2" falsecount="0"/>
+      <line num="43" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="44" count="1" type="stmt"/>
+      <line num="46" count="2" type="stmt"/>
+      <line num="47" count="2" type="stmt"/>
+      <line num="48" count="2" type="stmt"/>
+      <line num="49" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="50" count="1" type="stmt"/>
+      <line num="54" count="8" type="stmt"/>
+      <line num="55" count="8" type="cond" truecount="2" falsecount="0"/>
+      <line num="56" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="57" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="58" count="1" type="stmt"/>
+      <line num="60" count="6" type="cond" truecount="2" falsecount="0"/>
+      <line num="61" count="3" type="cond" truecount="4" falsecount="0"/>
+      <line num="62" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="63" count="1" type="stmt"/>
+      <line num="65" count="4" type="cond" truecount="2" falsecount="0"/>
+      <line num="66" count="2" type="stmt"/>
+      <line num="67" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="68" count="1" type="stmt"/>
+      <line num="70" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="71" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="72" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="73" count="1" type="stmt"/>
+      <line num="76" count="3" type="stmt"/>
+      <line num="79" count="3" type="stmt"/>
+      <line num="80" count="3" type="stmt"/>
+      <line num="81" count="3" type="stmt"/>
+      <line num="82" count="3" type="stmt"/>
+      <line num="83" count="3" type="stmt"/>
+      <line num="85" count="3" type="stmt"/>
+      <line num="87" count="3" type="stmt"/>
     </file>
   </project>
 </coverage>

@@ -4,7 +4,7 @@ const SprintType = new GraphQLObjectType({
   name: 'Sprint',
   fields: {
     sprintID: { type: GraphQLInt },
-    sprintNumber: { type: GraphQLInt },
+    sprintNumber: { type: GraphQLInt, resolve: source => source.number },
     description: { type: GraphQLString },
     startDate: { type: GraphQLString },
     endDate: { type: GraphQLString },

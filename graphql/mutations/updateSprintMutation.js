@@ -16,7 +16,7 @@ module.exports = {
     const sprint = await db.Sprint.findByPk(input.sprintID);
     if (!sprint) throw new Error('Sprint not found');
 
-    const rawNumber = input.sprintNumber !== undefined ? input.sprintNumber : (input.number !== undefined ? input.number : undefined);
+    const rawNumber = input.sprintNumber !== undefined ? input.sprintNumber : undefined;
     const sprintNumber = rawNumber !== undefined ? Number(rawNumber) : undefined;
 
     if (rawNumber !== undefined) {

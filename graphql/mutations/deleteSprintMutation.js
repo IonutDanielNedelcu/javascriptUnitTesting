@@ -8,17 +8,12 @@ module.exports = {
     sprintID: { type: new GraphQLNonNull(GraphQLInt) },
   },
   resolve: async (_source, { sprintID }, context) => {
-    try {
-      // only Admins and Managers can perform this action
-      authorizeRoles(context, ['Admin', 'Manager']);
+    authorizeRoles(context, ['Admin', 'Manager']);
 
-      const sprint = await db.Sprint.findByPk(sprintID);
-      if (!sprint) throw new Error('Sprint not found');
+    const sprint = await db.Sprint.findByPk(sprintID);
+    if (!sprint) throw new Error('Sprint not found');
 
-      await sprint.destroy();
-      return `Sprint deleted`;
-    } catch (err) {
-      throw new Error(err.message || 'Failed to delete sprint');
-    }
+    await sprint.destroy();
+    return `Sprint deleted`;
   },
 };

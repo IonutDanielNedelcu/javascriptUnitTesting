@@ -9,87 +9,81 @@ module.exports = {
     input: { type: new GraphQLNonNull(UpdateTaskInput) },
   },
   resolve: async (_source, { input }, context) => {
-    try {
-      if (!context || !context.user) throw new Error('Not authenticated');
-      const task = await db.Task.findByPk(input.taskID);
-      if (!task) throw new Error('Task not found');
+    const task = await db.Task.findByPk(input.taskID);
+    if (!task) throw new Error('Task not found');
 
-      // Resolve `assigneeUsername` into `assigneeUserID`.
-      // - if the field is absent: keep existing assignee
-      // - if the field is present and null: explicit request to clear assignee (Not permitted)
-      // - if the field is present: look up user by username and set the id
-      let assigneeUserID = task.assigneeUserID;
-      if (Object.prototype.hasOwnProperty.call(input, 'assigneeUsername')) {
-        if (input.assigneeUsername === null) {
-          throw new Error('Assignee cannot be set to null');
-        } else {
-          const assignee = await db.User.findOne({ where: { username: input.assigneeUsername } });
-          if (!assignee) throw new Error('Assignee not found');
-          assigneeUserID = assignee.userID;
-        }
+    // Resolve `assigneeUsername` into `assigneeUserID`.
+    // - if the field is absent: keep existing assignee
+    // - if the field is present and null: explicit request to clear assignee (Not permitted)
+    // - if the field is present: look up user by username and set the id
+    let assigneeUserID = task.assigneeUserID;
+    if (Object.prototype.hasOwnProperty.call(input, 'assigneeUsername')) {
+      if (input.assigneeUsername === null) {
+        throw new Error('Assignee cannot be set to null');
+      } else {
+        const assignee = await db.User.findOne({ where: { username: input.assigneeUsername } });
+        if (!assignee) throw new Error('Assignee not found');
+        assigneeUserID = assignee.userID;
       }
-
-      let projectID = task.projectID;
-      if (Object.prototype.hasOwnProperty.call(input, 'projectName')) {
-        if (input.projectName === null) {
-          throw new Error('Project cannot be set to null');
-        } else {
-          const project = await db.Project.findOne({ where: { name: input.projectName } });
-          if (!project) throw new Error('Project not found');
-          projectID = project.projectID;
-        }
-      }
-
-      let sprintID = input.sprintID !== undefined ? input.sprintID : task.sprintID;
-      if (typeof input.sprintNumber !== 'undefined') {
-        if (input.sprintNumber === null) {
-          sprintID = null;
-        } else {
-          const sprintWhere = { number: input.sprintNumber };
-          if (projectID) sprintWhere.projectID = projectID;
-          const sprint = await db.Sprint.findOne({ where: sprintWhere });
-          if (!sprint) throw new Error('Sprint not found');
-          sprintID = sprint.sprintID;
-        }
-      }
-
-      const updateTask = {};
-      if (input.name !== undefined) {
-        if (String(input.name).trim() === '') throw new Error('Task name is required');
-        if (String(input.name).trim().length > 200) throw new Error('Task name must be at most 200 characters');
-        updateTask.name = String(input.name).trim();
-      }
-      if (input.description !== undefined) {
-        if (input.description === null || String(input.description).trim() === '') throw new Error('Task description is required');
-        if (String(input.description).trim().length > 2000) throw new Error('Task description must be at most 2000 characters');
-        updateTask.description = String(input.description).trim();
-      }
-      if (input.status !== undefined) {
-        const allowedStatuses = ['Open', 'In Progress', 'Done', 'Closed'];
-        if (!allowedStatuses.includes(input.status)) throw new Error('Invalid status');
-        updateTask.status = input.status;
-      }
-      if (input.reporterUserID !== undefined) updateTask.reporterUserID = input.reporterUserID;
-      if (assigneeUserID !== undefined) updateTask.assigneeUserID = assigneeUserID;
-      if (sprintID !== undefined) updateTask.sprintID = sprintID;
-      if (Object.prototype.hasOwnProperty.call(input, 'projectID') || Object.prototype.hasOwnProperty.call(input, 'projectName')) {
-        updateTask.projectID = projectID;
-      }
-
-      await task.update(updateTask);
-
-      // return updated task 
-      const includes = [];
-      includes.push({ model: db.User, as: 'reporter', attributes: ['userID', 'username', 'email'] });
-      includes.push({ model: db.User, as: 'assignee', attributes: ['userID', 'username', 'email'] });
-      includes.push({ model: db.Sprint, as: 'sprint', attributes: ['sprintID', 'number'] });
-      includes.push({ model: db.Project, as: 'project', attributes: ['projectID', 'name'] });
-
-      const updatedTask = await db.Task.findByPk(task.taskID, { include: includes });
-      
-      return updatedTask;
-    } catch (err) {
-      throw new Error(err.message || 'Failed to update task');
     }
+
+    let projectID = task.projectID;
+    if (Object.prototype.hasOwnProperty.call(input, 'projectName')) {
+      if (input.projectName === null) {
+        throw new Error('Project cannot be set to null');
+      } else {
+        const project = await db.Project.findOne({ where: { name: input.projectName } });
+        if (!project) throw new Error('Project not found');
+        projectID = project.projectID;
+      }
+    }
+
+    let sprintID = task.sprintID;
+    if (typeof input.sprintNumber !== 'undefined') {
+      if (input.sprintNumber === null) {
+        sprintID = null;
+      } else {
+        const sprintWhere = { number: input.sprintNumber };
+        sprintWhere.projectID = projectID;
+        const sprint = await db.Sprint.findOne({ where: sprintWhere });
+        if (!sprint) throw new Error('Sprint not found');
+        sprintID = sprint.sprintID;
+      }
+    }
+
+    const updateTask = {};
+    if (input.name !== undefined) {
+      if (String(input.name).trim() === '') throw new Error('Task name is required');
+      if (String(input.name).trim().length > 200) throw new Error('Task name must be at most 200 characters');
+      updateTask.name = String(input.name).trim();
+    }
+    if (input.description !== undefined) {
+      if (input.description === null || String(input.description).trim() === '') throw new Error('Task description is required');
+      if (String(input.description).trim().length > 2000) throw new Error('Task description must be at most 2000 characters');
+      updateTask.description = String(input.description).trim();
+    }
+    if (input.status !== undefined) {
+      const allowedStatuses = ['Open', 'In Progress', 'Done', 'Closed'];
+      if (!allowedStatuses.includes(input.status)) throw new Error('Invalid status');
+      updateTask.status = input.status;
+    }
+    if (Object.prototype.hasOwnProperty.call(input, 'assigneeUsername')) updateTask.assigneeUserID = assigneeUserID;
+    if (Object.prototype.hasOwnProperty.call(input, 'sprintNumber')) updateTask.sprintID = sprintID;
+    if (Object.prototype.hasOwnProperty.call(input, 'projectName')) {
+      updateTask.projectID = projectID;
+    }
+
+    await task.update(updateTask);
+
+    // return updated task 
+    const includes = [];
+    includes.push({ model: db.User, as: 'reporter', attributes: ['userID', 'username', 'email'] });
+    includes.push({ model: db.User, as: 'assignee', attributes: ['userID', 'username', 'email'] });
+    includes.push({ model: db.Sprint, as: 'sprint', attributes: ['sprintID', 'number'] });
+    includes.push({ model: db.Project, as: 'project', attributes: ['projectID', 'name'] });
+
+    const updatedTask = await db.Task.findByPk(task.taskID, { include: includes });
+    
+    return updatedTask;
   },
 };
