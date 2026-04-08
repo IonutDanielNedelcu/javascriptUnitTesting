@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1775687897566" clover="3.2.0">
-  <project timestamp="1775687897566" name="All files">
-    <metrics statements="416" coveredstatements="416" conditionals="331" coveredconditionals="331" methods="18" coveredmethods="18" elements="765" coveredelements="765" complexity="0" loc="416" ncloc="416" packages="1" files="16" classes="16"/>
-    <file name="addRoleToUserMutation.js" path="C:\Users\Andreea\Desktop\An 3 FMI\Semestrul2\TSS\javascriptUnitTesting\graphql\mutations\addRoleToUserMutation.js">
+<coverage generated="1774727402263" clover="3.2.0">
+  <project timestamp="1774727402264" name="All files">
+    <metrics statements="198" coveredstatements="198" conditionals="136" coveredconditionals="136" methods="10" coveredmethods="10" elements="344" coveredelements="344" complexity="0" loc="198" ncloc="198" packages="1" files="8" classes="8"/>
+    <file name="addRoleToUserMutation.js" path="D:\University\An3Sem2\TSS\javascriptUnitTesting\graphql\mutations\addRoleToUserMutation.js">
       <metrics statements="15" coveredstatements="15" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
       <line num="1" count="16" type="stmt"/>
       <line num="2" count="16" type="stmt"/>

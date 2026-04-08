@@ -6,6 +6,8 @@ const {
   createProject,
 } = require('./helpers');
 
+const db = require('../models');
+
 const createProjectResolver = require('../graphql/mutations/createProjectMutation');
 
 const createProjectMutation = `
@@ -47,6 +49,7 @@ describe('projects_createProjectMutation', () => {
 
     expect(result.errors).toBeUndefined();
     expect(result.data.createProject.name).toBe('JavascriptTesting');
+    expect(result.data.createProject.description).toBe('Short description');
   });
 
   // test 2
@@ -141,6 +144,52 @@ describe('projects_createProjectMutation', () => {
     expect(result.errors[0].message).toBe('Project name must be between 3 and 50 characters');
   });
 
+  test('createProjectNameMinLengthValid', async () => {
+    const admin = await createUserWithRoles({
+      email: 'adminmin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'adminmin',
+      roles: ['Admin'],
+    });
+
+    const input = {
+      name: 'abc',
+      description: 'Short description',
+    };
+
+    const result = await executeGraphql({
+      source: createProjectMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(admin),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.createProject.name).toBe('abc');
+  });
+
+  test('createProjectNameMaxLengthValid', async () => {
+    const admin = await createUserWithRoles({
+      email: 'adminmax@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'adminmax',
+      roles: ['Admin'],
+    });
+
+    const input = {
+      name: makeString(50),
+      description: 'Short description',
+    };
+
+    const result = await executeGraphql({
+      source: createProjectMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(admin),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.createProject.name).toBe(makeString(50));
+  });
+
   // test 6
   test('createProjectNameDuplicate', async () => {
     await createProject({ name: 'DuplicateName' });
@@ -221,6 +270,34 @@ describe('projects_createProjectMutation', () => {
     expect(result.errors[0].message).toBe('This repository is already assigned to another project');
   });
 
+  test('createProjectRepositoryValidWithExistingProject', async () => {
+    await createProject({ name: 'ExistingNoRepo' });
+
+    const admin = await createUserWithRoles({
+      email: 'adminvalidrepo2@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'adminvalidrepo2',
+      roles: ['Admin'],
+    });
+
+    const repository = await createRepository({ name: 'RepoAvailable' });
+
+    const input = {
+      name: 'JavascriptTesting',
+      description: 'Short description',
+      repositoryID: repository.repositoryID,
+    };
+
+    const result = await executeGraphql({
+      source: createProjectMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(admin),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.createProject.repository.repositoryID).toBe(repository.repositoryID);
+  });
+
   test('createProjectRepositoryValidUnassigned', async () => {
     const admin = await createUserWithRoles({
       email: 'adminvalidrepo@example.com',
@@ -270,6 +347,54 @@ describe('projects_createProjectMutation', () => {
     expect(result.data.createProject.description).toBeNull();
   });
 
+  test('createProjectTrimmedName', async () => {
+    const admin = await createUserWithRoles({
+      email: 'admintrim@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admintrim',
+      roles: ['Admin'],
+    });
+
+    const input = {
+      name: '  JavascriptTesting  ',
+      description: 'Short description',
+      repositoryID: null,
+    };
+
+    const result = await executeGraphql({
+      source: createProjectMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(admin),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.createProject.name).toBe('JavascriptTesting');
+  });
+
+  test('createProjectTrimmedDescription', async () => {
+    const admin = await createUserWithRoles({
+      email: 'admindesctrim@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admindesctrim',
+      roles: ['Admin'],
+    });
+
+    const input = {
+      name: 'JavascriptTesting',
+      description: '  Short description  ',
+      repositoryID: null,
+    };
+
+    const result = await executeGraphql({
+      source: createProjectMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(admin),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.createProject.description).toBe('Short description');
+  });
+
   test('createProjectAllValidDirectArgs', async () => {
     const admin = await createUserWithRoles({
       email: 'adminargs@example.com',
@@ -278,17 +403,44 @@ describe('projects_createProjectMutation', () => {
       roles: ['Admin'],
     });
 
+    const repository = await createRepository({ name: 'RepoDirectArgs' });
+
     const result = await createProjectResolver.resolve(
       null,
       {
         name: 'JavascriptTesting',
         description: 'Short description',
-        repositoryID: null,
+        repositoryID: repository.repositoryID,
       },
       { user: buildContextUser(admin) }
     );
 
     expect(result.name).toBe('JavascriptTesting');
+    expect(result.repository).toBeTruthy();
+    expect(result.repository.repositoryID).toBe(repository.repositoryID);
+  });
+
+  test('createProjectDescriptionMaxLengthValid', async () => {
+    const admin = await createUserWithRoles({
+      email: 'admindescmax@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admindescmax',
+      roles: ['Admin'],
+    });
+
+    const input = {
+      name: 'JavascriptTesting',
+      description: makeString(500),
+    };
+
+    const result = await executeGraphql({
+      source: createProjectMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(admin),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.createProject.description).toBe(makeString(500));
   });
 
   // test 9
@@ -313,4 +465,5 @@ describe('projects_createProjectMutation', () => {
 
     expect(result.errors[0].message).toBe('Description must be at most 500 characters');
   });
+
 });

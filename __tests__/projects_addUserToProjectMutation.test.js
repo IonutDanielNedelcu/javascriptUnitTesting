@@ -5,8 +5,9 @@ const {
   buildContextUser,
   createProject,
   addUserToProject,
-  db,
 } = require('./helpers');
+
+const db = require('../models');
 
 const addUserToProjectResolver = require('../graphql/mutations/addUserToProjectMutation');
 
@@ -81,6 +82,33 @@ describe('projects_addUserToProjectMutation', () => {
     });
 
     expect(result.errors[0].message).toBe('Not authorized');
+  });
+
+  test('addUserToProjectManagerAllowed', async () => {
+    const project = await createProject({ name: 'AssignManagerProject' });
+    const user = await createUser({
+      email: 'manageruser@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'manageruser',
+    });
+
+    const manager = await createUserWithRoles({
+      email: 'manager@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'manager',
+      roles: ['Manager'],
+    });
+
+    const input = { projectID: project.projectID, userID: user.userID };
+
+    const result = await executeGraphql({
+      source: addUserToProjectMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(manager),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.addUserToProject).toBe(true);
   });
 
   // test 3
@@ -166,6 +194,42 @@ describe('projects_addUserToProjectMutation', () => {
     expect(result.errors[0].message).toBe('User is already assigned to this project');
   });
 
+  test('addUserToProjectIgnoresOtherLinks', async () => {
+    const projectA = await createProject({ name: 'AssignProjectA' });
+    const userA = await createUser({
+      email: 'usera@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'usera',
+    });
+
+    const projectB = await createProject({ name: 'AssignProjectB' });
+    const userB = await createUser({
+      email: 'userb@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'userb',
+    });
+
+    await addUserToProject({ userID: userB.userID, projectID: projectB.projectID });
+
+    const admin = await createUserWithRoles({
+      email: 'adminlink@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'adminlink',
+      roles: ['Admin'],
+    });
+
+    const input = { projectID: projectA.projectID, userID: userA.userID };
+
+    const result = await executeGraphql({
+      source: addUserToProjectMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(admin),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.addUserToProject).toBe(true);
+  });
+
   test('addUserToProjectAllValidDirectArgs', async () => {
     const project = await createProject({ name: 'AssignProjectArgs' });
     const user = await createUser({
@@ -192,4 +256,5 @@ describe('projects_addUserToProjectMutation', () => {
 
     expect(result).toBe(true);
   });
+
 });

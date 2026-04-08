@@ -1,0 +1,103 @@
+baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+22:15:34 (22624) INFO ProjectReader Found 8 of 310 file(s) to be mutated.
+22:15:34 (22624) INFO Instrumenter Instrumented 8 source file(s) with 448 mutant(s)
+22:15:34 (22624) INFO ConcurrencyTokenProvider Creating 11 test runner process(es).
+22:15:36 (22624) INFO DryRunExecutor Starting initial test run (jest test runner with "off" coverage analysis). This may take a while.
+22:15:52 (22624) INFO DryRunExecutor Initial test run succeeded. Ran 68 tests in 15 seconds (net 8511 ms, overhead 6697 ms).
+Mutation testing  [] 100% (elapsed: ~19m, remaining: n/a) 448/448 Mutants tested (0 survived, 448 timed out)
+
+All tests
+  projects_addUserToProjectMutation.test.js
+    ✘ projects_addUserToProjectMutation addUserToProjectAllValid [line 21] (covered 0)
+    ✘ projects_addUserToProjectMutation addUserToProjectNonAdmin [line 57] (covered 0)
+    ✘ projects_addUserToProjectMutation addUserToProjectProjectNotFound [line 87] (covered 0)
+    ✘ projects_addUserToProjectMutation addUserToProjectUserNotFound [line 115] (covered 0)
+    ✘ projects_addUserToProjectMutation addUserToProjectAlreadyAssigned [line 138] (covered 0)
+    ✘ projects_addUserToProjectMutation addUserToProjectAllValidDirectArgs [line 169] (covered 0)
+  projects_createProjectMutation.test.js
+    ✘ projects_createProjectMutation createProjectAllValid [line 28] (covered 0)
+    ✘ projects_createProjectMutation createProjectNonAdmin [line 53] (covered 0)
+    ✘ projects_createProjectMutation createProjectNameMissing [line 76] (covered 0)
+    ✘ projects_createProjectMutation createProjectNameTooShort [line 99] (covered 0)
+    ✘ projects_createProjectMutation createProjectNameTooLong [line 122] (covered 0)
+    ✘ projects_createProjectMutation createProjectNameDuplicate [line 145] (covered 0)
+    ✘ projects_createProjectMutation createProjectRepositoryNotFound [line 170] (covered 0)
+    ✘ projects_createProjectMutation createProjectRepositoryAssigned [line 194] (covered 0)
+    ✘ projects_createProjectMutation createProjectRepositoryValidUnassigned [line 224] (covered 0)
+    ✘ projects_createProjectMutation createProjectAllValidNoDescription [line 250] (covered 0)
+    ✘ projects_createProjectMutation createProjectAllValidDirectArgs [line 273] (covered 0)
+    ✘ projects_createProjectMutation createProjectDescriptionTooLong [line 295] (covered 0)
+  projects_deleteProjectMutation.test.js
+    ✘ projects_deleteProjectMutation deleteProjectAllValid [line 16] (covered 0)
+    ✘ projects_deleteProjectMutation deleteProjectNonAdmin [line 38] (covered 0)
+    ✘ projects_deleteProjectMutation deleteProjectNotFound [line 59] (covered 0)
+  projects_removeUserFromProjectMutation.test.js
+    ✘ projects_removeUserFromProjectMutation removeUserFromProjectAllValid [line 18] (covered 0)
+    ✘ projects_removeUserFromProjectMutation removeUserFromProjectNonAdmin [line 51] (covered 0)
+    ✘ projects_removeUserFromProjectMutation removeUserFromProjectLinkNotFound [line 81] (covered 0)
+  projects_updateProjectMutation.test.js
+    ✘ projects_updateProjectMutation updateProjectAllValid [line 25] (covered 0)
+    ✘ projects_updateProjectMutation updateProjectNonAdmin [line 53] (covered 0)
+    ✘ projects_updateProjectMutation updateProjectNotFound [line 80] (covered 0)
+    ✘ projects_updateProjectMutation updateProjectNameMissing [line 104] (covered 0)
+    ✘ projects_updateProjectMutation updateProjectNameTooShort [line 131] (covered 0)
+    ✘ projects_updateProjectMutation updateProjectNameTooLong [line 158] (covered 0)
+    ✘ projects_updateProjectMutation updateProjectDescriptionTooLong [line 185] (covered 0)
+    ✘ projects_updateProjectMutation updateProjectRepositoryNotFound [line 212] (covered 0)
+    ✘ projects_updateProjectMutation updateProjectRepositoryValidOnly [line 239] (covered 0)
+  users_addRoleToUserMutation.test.js
+    ✘ users_addRoleToUserMutation roleAssignmentAllValid [line 20] (covered 0)
+    ✘ users_addRoleToUserMutation roleAssignmentNonAdmin [line 46] (covered 0)
+    ✘ users_addRoleToUserMutation roleAssignmentUserNotFound [line 70] (covered 0)
+    ✘ users_addRoleToUserMutation roleAssignmentRoleNotFound [line 88] (covered 0)
+    ✘ users_addRoleToUserMutation roleAssignmentRoleAlreadyAssigned [line 112] (covered 0)
+  users_loginMutation.test.js
+    ✘ users_loginMutation loginAllValid [line 28] (covered 0)
+    ✘ users_loginMutation loginEmailMissing [line 51] (covered 0)
+    ✘ users_loginMutation loginEmailTooShort [line 66] (covered 0)
+    ✘ users_loginMutation loginEmailTooLong [line 81] (covered 0)
+    ✘ users_loginMutation loginEmailInvalidFormat [line 96] (covered 0)
+    ✘ users_loginMutation loginPasswordMissing [line 111] (covered 0)
+    ✘ users_loginMutation loginPasswordTooShort [line 126] (covered 0)
+    ✘ users_loginMutation loginPasswordTooLong [line 141] (covered 0)
+    ✘ users_loginMutation loginUserNotFound [line 156] (covered 0)
+    ✘ users_loginMutation loginPasswordMismatch [line 171] (covered 0)
+  users_registerMutation.test.js
+    ✘ users_registerMutation registerAllValid [line 34] (covered 0)
+    ✘ users_registerMutation registerAllValidWithoutEmployeeRole [line 60] (covered 0)
+    ✘ users_registerMutation registerEmailMissing [line 81] (covered 0)
+    ✘ users_registerMutation registerEmailTooShort [line 99] (covered 0)
+    ✘ users_registerMutation registerEmailTooLong [line 117] (covered 0)
+    ✘ users_registerMutation registerEmailInvalidFormat [line 135] (covered 0)
+    ✘ users_registerMutation registerEmailDuplicate [line 153] (covered 0)
+    ✘ users_registerMutation registerPasswordMissing [line 177] (covered 0)
+    ✘ users_registerMutation registerPasswordTooShort [line 195] (covered 0)
+    ✘ users_registerMutation registerPasswordTooLong [line 213] (covered 0)
+    ✘ users_registerMutation registerUsernameMissing [line 231] (covered 0)
+    ✘ users_registerMutation registerUsernameTooShort [line 249] (covered 0)
+    ✘ users_registerMutation registerUsernameTooLong [line 267] (covered 0)
+    ✘ users_registerMutation registerUsernameDuplicate [line 285] (covered 0)
+    ✘ users_registerMutation registerFirstNameMissing [line 309] (covered 0)
+    ✘ users_registerMutation registerFirstNameTooShort [line 327] (covered 0)
+    ✘ users_registerMutation registerFirstNameTooLong [line 345] (covered 0)
+    ✘ users_registerMutation registerLastNameMissing [line 363] (covered 0)
+    ✘ users_registerMutation registerLastNameTooShort [line 381] (covered 0)
+    ✘ users_registerMutation registerLastNameTooLong [line 399] (covered 0)
+
+Ran 0.00 tests per mutant on average.
+----------------------------------|------------------|----------|-----------|------------|----------|----------|
+                                  | % Mutation score |          |           |            |          |          |      
+File                              |  total | covered | # killed | # timeout | # survived | # no cov | # errors |      
+----------------------------------|--------|---------|----------|-----------|------------|----------|----------|      
+All files                         | 100.00 |  100.00 |        0 |       448 |          0 |        0 |        0 |      
+ addRoleToUserMutation.js         | 100.00 |  100.00 |        0 |        29 |          0 |        0 |        0 |      
+ addUserToProjectMutation.js      | 100.00 |  100.00 |        0 |        26 |          0 |        0 |        0 |      
+ createProjectMutation.js         | 100.00 |  100.00 |        0 |        74 |          0 |        0 |        0 |      
+ deleteProjectMutation.js         | 100.00 |  100.00 |        0 |        11 |          0 |        0 |        0 |      
+ loginMutation.js                 | 100.00 |  100.00 |        0 |        82 |          0 |        0 |        0 |      
+ registerMutation.js              | 100.00 |  100.00 |        0 |       154 |          0 |        0 |        0 |      
+ removeUserFromProjectMutation.js | 100.00 |  100.00 |        0 |        15 |          0 |        0 |        0 |      
+ updateProjectMutation.js         | 100.00 |  100.00 |        0 |        57 |          0 |        0 |        0 |      
+----------------------------------|--------|---------|----------|-----------|------------|----------|----------|      
+22:35:27 (22624) INFO HtmlReporter Your report can be found at: file:///D:/University/An3Sem2/TSS/javascriptUnitTesting/reports/mutation/mutation.html
+22:35:27 (22624) INFO MutationTestExecutor Done in 19 minutes 54 seconds.
