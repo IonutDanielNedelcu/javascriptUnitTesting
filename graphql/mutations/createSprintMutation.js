@@ -5,6 +5,8 @@ const { authorizeRoles } = require('../../utils/authorize');
 const db = require('../../models');
 const { Op } = require('sequelize');
 
+const SPRINT_NUMBER = 'sprintNumber';
+
 module.exports = {
   type: SprintType,
   args: {
@@ -15,16 +17,25 @@ module.exports = {
 
     authorizeRoles(context, ['Admin', 'Manager']);
 
-    const sprintNumber = input.sprintNumber !== undefined ? Number(input.sprintNumber) : undefined;
-    const description = typeof input.description === 'string' ? input.description.trim() : null;
+    if (!Object.prototype.hasOwnProperty.call(input, SPRINT_NUMBER)) {
+      throw new Error('Sprint number is required');
+    }
+    const sprintNumber = Number(input[SPRINT_NUMBER]);
+
+    let description = null;
+    if (typeof input.description === 'string') {
+      const trimmed = input.description.trim();
+      if (trimmed.length > 2000) throw new Error('Sprint description must be at most 2000 characters');
+      description = trimmed;
+    }
     const startDate = input.startDate;
     const endDate = input.endDate;
     const projectID = input.projectID || null;
 
-    if (!input.sprintNumber && input.sprintNumber !== 0) {
-      throw new Error('Sprint number is required');
+    if (!Number.isInteger(sprintNumber)) {
+      throw new Error('Sprint number must be an integer');
     }
-    if (!Number.isInteger(sprintNumber) || sprintNumber < 1) {
+    if (sprintNumber < 1) {
       throw new Error('Sprint number must be greater than or equal to 1');
     }
 

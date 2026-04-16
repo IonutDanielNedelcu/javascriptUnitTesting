@@ -12,7 +12,11 @@ module.exports = {
     const task = await db.Task.findByPk(input.taskID);
     if (!task) throw new Error('Task not found');
 
-    if (input.status === undefined || input.status === null) {
+    const hasStatusProp = Object.prototype.hasOwnProperty.call(input, 'status');
+    if (!hasStatusProp) {
+      throw new Error('Status is required');
+    }
+    if (input.status === null) {
       throw new Error('Status is required');
     }
 

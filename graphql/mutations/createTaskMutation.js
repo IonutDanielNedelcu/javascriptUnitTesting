@@ -13,17 +13,30 @@ module.exports = {
     const creator = getViewer(context);
     const reporterId = creator.userID;
 
-    // Basic validation and boundaries
-    if (!input || !input.name || String(input.name).trim() === '') throw new Error('Task name is required');
-    const name = String(input.name).trim();
+    if (!Object.prototype.hasOwnProperty.call(input, 'name') || String(input.name || '').trim() === '') {
+      throw new Error('Task name is required');
+    }
+    const name = String(input.name);
+
     if (name.length > 200) throw new Error('Task name must be at most 200 characters');
 
-    if (input.description === undefined || input.description === null || String(input.description).trim() === '') throw new Error('Task description is required');
-    const descriptionText = String(input.description).trim();
-    if (descriptionText.length > 2000) throw new Error('Task description must be at most 2000 characters');
+    const description = (() => {
+      const hasDescription = Object.prototype.hasOwnProperty.call(input, 'description');
+      if (!hasDescription) {
+        throw new Error('Task description is required');
+      }
+      if (input.description === null) {
+        throw new Error('Task description is required');
+      }
+      const trimmed = String(input.description).trim();
+      if (trimmed === '') throw new Error('Task description is required');
+      if (trimmed.length > 2000) throw new Error('Task description must be at most 2000 characters');
+      return trimmed;
+    })();
 
-    const allowedStatuses = ['Open', 'In Progress', 'Done', 'Closed'];
-    if (input.status !== undefined && !allowedStatuses.includes(input.status)) throw new Error('Invalid status');
+    const ALLOWED_STATUSES = new Set(['Open', 'In Progress', 'Done', 'Closed']);
+    const statusProvided = Object.prototype.hasOwnProperty.call(input, 'status') && input.status !== null;
+    if (statusProvided && !ALLOWED_STATUSES.has(String(input.status))) throw new Error('Invalid status');
 
     let assigneeUserID = null;
     if (input.assigneeUsername) {
@@ -33,18 +46,24 @@ module.exports = {
     }
 
     let projectID = null;
-    if (input.projectName === undefined || input.projectName === null || String(input.projectName).trim() === '') {
+    const hasProjectNameProp = Object.prototype.hasOwnProperty.call(input, 'projectName');
+    if (!hasProjectNameProp) {
       throw new Error('Project name is required');
-    } else {
-      const project = await db.Project.findOne({ where: { name: input.projectName } });
-      if (!project) throw new Error('Project not found');
-      projectID = project.projectID;
     }
+    if (input.projectName === null) {
+      throw new Error('Project name is required');
+    }
+    const providedProjectName = input.projectName.trim();
+    if (providedProjectName === '') throw new Error('Project name is required');
+    const project = await db.Project.findOne({ where: { name: providedProjectName } });
+    if (!project) throw new Error('Project not found');
+    projectID = project.projectID;
 
     let sprintID = null;
-    if (input.sprintNumber !== undefined && input.sprintNumber !== null) {
-      const sprintWhere = { number: input.sprintNumber };
-      sprintWhere.projectID = projectID;
+    const hasSprintProp = Object.prototype.hasOwnProperty.call(input, 'sprintNumber');
+    if (hasSprintProp) {
+      const num = Number(input.sprintNumber);
+      const sprintWhere = { number: num, projectID };
       const sprint = await db.Sprint.findOne({ where: sprintWhere });
       if (!sprint) throw new Error('Sprint not found');
       sprintID = sprint.sprintID;
@@ -52,8 +71,8 @@ module.exports = {
 
     const newTask = await db.Task.create({
       name,
-      description: descriptionText,
-      status: input.status || 'Open',
+      description: description,
+      status: statusProvided ? input.status : 'Open',
       reporterUserID: reporterId,
       assigneeUserID,
       projectID,

@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
         description: {
             type: DataTypes.STRING,
             allowNull: true,
+            validate: {
+                len: [0, 2000],
+            },
         },
         startDate: {
             type: DataTypes.DATEONLY,

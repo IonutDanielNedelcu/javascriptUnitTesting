@@ -4,85 +4,93 @@ const UpdateSprintInput = require('../inputTypes/UpdateSprintInputType');
 const { authorizeRoles } = require('../../utils/authorize');
 const db = require('../../models');
 
+const SPRINT_NUMBER = 'sprintNumber';
+
 module.exports = {
   type: SprintType,
   args: {
     input: { type: new GraphQLNonNull(UpdateSprintInput) },
   },
   resolve: async (_source, { input }, context) => {
+    const args = { ...input };
+
     // only Admins and Managers can perform this action
     authorizeRoles(context, ['Admin', 'Manager']);
-    
-    const sprint = await db.Sprint.findByPk(input.sprintID);
+
+    const sprint = await db.Sprint.findByPk(args.sprintID);
     if (!sprint) throw new Error('Sprint not found');
 
-    const rawNumber = input.sprintNumber !== undefined ? input.sprintNumber : undefined;
-    const sprintNumber = rawNumber !== undefined ? Number(rawNumber) : undefined;
-
-    if (rawNumber !== undefined) {
-      if (!Number.isInteger(sprintNumber) || sprintNumber < 1) {
+    let sprintNumber;
+    if (Object.prototype.hasOwnProperty.call(args, SPRINT_NUMBER)) {
+      sprintNumber = Number(args[SPRINT_NUMBER]);
+      if (!Number.isInteger(sprintNumber)) {
+        throw new Error('Sprint number must be an integer');
+      }
+      if (sprintNumber < 1) {
         throw new Error('Sprint number must be greater than or equal to 1');
       }
+      args.number = sprintNumber;
+      delete args.sprintNumber;
     }
 
-    const targetProjectID = input.projectID !== undefined && input.projectID !== null ? input.projectID : sprint.projectID;
+    if (typeof args.description === 'string') {
+      const trimmedDescription = args.description.trim();
+      if (trimmedDescription.length > 2000) throw new Error('Sprint description must be at most 2000 characters');
+      args.description = trimmedDescription;
+    }
 
-    if (targetProjectID !== undefined && targetProjectID !== null) {
-      const project = await db.Project.findByPk(targetProjectID);
+    if (Object.prototype.hasOwnProperty.call(args, 'projectID') && args.projectID !== null && args.projectID !== undefined) {
+      const project = await db.Project.findByPk(args.projectID);
       if (!project) throw new Error('Project not found');
     }
 
-    const newStart = input.startDate !== undefined ? input.startDate : sprint.startDate;
-    const newEnd = input.endDate !== undefined ? input.endDate : sprint.endDate;
+    const targetProjectID = Object.prototype.hasOwnProperty.call(args, 'projectID')
+      ? (args.projectID === null ? sprint.projectID : args.projectID)
+      : sprint.projectID;
 
-    if (input.startDate !== undefined || input.endDate !== undefined) {
-      if (!newStart) throw new Error('Start date is required');
-      if (!newEnd) throw new Error('End date is required');
+    if (Object.prototype.hasOwnProperty.call(args, 'startDate') || Object.prototype.hasOwnProperty.call(args, 'endDate')) {
+      if (Object.prototype.hasOwnProperty.call(args, 'startDate') && args.startDate === '') {
+        throw new Error('Start date is required');
+      }
+      if (Object.prototype.hasOwnProperty.call(args, 'endDate') && args.endDate === '') {
+        throw new Error('End date is required');
+      }
 
-      const sDate = new Date(newStart);
-      const eDate = new Date(newEnd);
+      const sDate = new Date(args.startDate || sprint.startDate);
+      const eDate = new Date(args.endDate || sprint.endDate);
       if (isNaN(sDate.getTime()) || isNaN(eDate.getTime())) {
         throw new Error('Invalid date format');
       }
+
       if (sDate >= eDate) {
         throw new Error('Start date must be before end date');
       }
 
-      if (targetProjectID) {
-        const overlapping = await db.Sprint.findOne({
-          where: {
-            projectID: targetProjectID,
-            sprintID: { [db.Sequelize.Op.ne]: sprint.sprintID },
-            [db.Sequelize.Op.or]: [
-              {
-                startDate: { [db.Sequelize.Op.lte]: newEnd },
-                endDate: { [db.Sequelize.Op.gte]: newStart },
-              },
-            ],
-          },
-        });
+      const overlapping = await db.Sprint.findOne({
+        where: {
+          projectID: targetProjectID,
+          sprintID: { [db.Sequelize.Op.ne]: sprint.sprintID },
+          [db.Sequelize.Op.and]: [
+            { startDate: { [db.Sequelize.Op.lte]: eDate } },
+            { endDate: { [db.Sequelize.Op.gte]: sDate } },
+          ],
+        },
+      });
 
-        if (overlapping) {
-          throw new Error('Sprint dates overlap with an existing sprint in this project');
-        }
-      }
+      if (overlapping) throw new Error('Sprint dates overlap with an existing sprint in this project');
     }
 
-    if (rawNumber !== undefined && targetProjectID) {
+    if (sprintNumber !== undefined && targetProjectID) {
       const existingNumber = await db.Sprint.findOne({ where: { projectID: targetProjectID, number: sprintNumber } });
       if (existingNumber && existingNumber.sprintID !== sprint.sprintID) {
         throw new Error('Sprint number already exists in project');
       }
     }
 
-    await sprint.update({
-      number: rawNumber !== undefined ? sprintNumber : sprint.number,
-      description: input.description !== undefined ? input.description : sprint.description,
-      startDate: input.startDate !== undefined ? input.startDate : sprint.startDate,
-      endDate: input.endDate !== undefined ? input.endDate : sprint.endDate,
-      projectID: input.projectID !== undefined ? input.projectID : sprint.projectID,
-    });
+    await sprint.update(args);
 
-    return sprint;
+    return db.Sprint.findByPk(sprint.sprintID, {
+      include: [{ model: db.Project, as: 'project' }]
+    });
   },
 };

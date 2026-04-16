@@ -3,87 +3,85 @@ const TaskType = require('../types/taskType');
 const UpdateTaskInput = require('../inputTypes/UpdateTaskInputType');
 const db = require('../../models');
 
+const SPRINT_NUMBER = 'sprintNumber';
+
 module.exports = {
   type: TaskType,
   args: {
     input: { type: new GraphQLNonNull(UpdateTaskInput) },
   },
   resolve: async (_source, { input }, context) => {
-    const task = await db.Task.findByPk(input.taskID);
+    const args = { ...input };
+
+    const task = await db.Task.findByPk(args.taskID);
     if (!task) throw new Error('Task not found');
 
-    // Resolve `assigneeUsername` into `assigneeUserID`.
-    // - if the field is absent: keep existing assignee
-    // - if the field is present and null: explicit request to clear assignee (Not permitted)
-    // - if the field is present: look up user by username and set the id
-    let assigneeUserID = task.assigneeUserID;
+    const updateTask = {};
+
     if (Object.prototype.hasOwnProperty.call(input, 'assigneeUsername')) {
-      if (input.assigneeUsername === null) {
+      if (args.assigneeUsername === null) {
         throw new Error('Assignee cannot be set to null');
       } else {
-        const assignee = await db.User.findOne({ where: { username: input.assigneeUsername } });
+        const assignee = await db.User.findOne({ where: { username: args.assigneeUsername } });
         if (!assignee) throw new Error('Assignee not found');
-        assigneeUserID = assignee.userID;
+        updateTask.assigneeUserID = assignee.userID;
       }
     }
 
-    let projectID = task.projectID;
+    let projectFromInput = null;
     if (Object.prototype.hasOwnProperty.call(input, 'projectName')) {
-      if (input.projectName === null) {
+      if (args.projectName === null) {
         throw new Error('Project cannot be set to null');
       } else {
-        const project = await db.Project.findOne({ where: { name: input.projectName } });
-        if (!project) throw new Error('Project not found');
-        projectID = project.projectID;
+        projectFromInput = await db.Project.findOne({ where: { name: input.projectName } });
+        if (!projectFromInput) throw new Error('Project not found');
+        updateTask.projectID = projectFromInput.projectID;
       }
     }
 
-    let sprintID = task.sprintID;
-    if (typeof input.sprintNumber !== 'undefined') {
-      if (input.sprintNumber === null) {
-        sprintID = null;
-      } else {
-        const sprintWhere = { number: input.sprintNumber };
-        sprintWhere.projectID = projectID;
+    if (Object.prototype.hasOwnProperty.call(input, SPRINT_NUMBER)) {
+      if (args.sprintNumber === null) {
+        updateTask.sprintID = null;
+      } else if (typeof args.sprintNumber === 'number') {
+        const sprintWhere = { number: args.sprintNumber };
+        sprintWhere.projectID = projectFromInput ? projectFromInput.projectID : task.projectID;
         const sprint = await db.Sprint.findOne({ where: sprintWhere });
         if (!sprint) throw new Error('Sprint not found');
-        sprintID = sprint.sprintID;
+        updateTask.sprintID = sprint.sprintID;
+      } else {
+        throw new Error('Invalid sprintNumber');
       }
     }
 
-    const updateTask = {};
-    if (input.name !== undefined) {
-      if (String(input.name).trim() === '') throw new Error('Task name is required');
-      if (String(input.name).trim().length > 200) throw new Error('Task name must be at most 200 characters');
-      updateTask.name = String(input.name).trim();
+    if (typeof args.name === 'string') {
+      const trimmedName = args.name.trim();
+      if (trimmedName === '') throw new Error('Task name is required');
+      if (trimmedName.length > 200) throw new Error('Task name must be at most 200 characters');
+      updateTask.name = trimmedName;
     }
-    if (input.description !== undefined) {
-      if (input.description === null || String(input.description).trim() === '') throw new Error('Task description is required');
-      if (String(input.description).trim().length > 2000) throw new Error('Task description must be at most 2000 characters');
-      updateTask.description = String(input.description).trim();
+
+    if (typeof args.description === 'string') {
+      const trimmedDescription = args.description.trim();
+      if (trimmedDescription === '') throw new Error('Task description is required');
+      if (trimmedDescription.length > 2000) throw new Error('Task description must be at most 2000 characters');
+      updateTask.description = trimmedDescription;
     }
-    if (input.status !== undefined) {
+
+    if (typeof args.status === 'string') {
       const allowedStatuses = ['Open', 'In Progress', 'Done', 'Closed'];
-      if (!allowedStatuses.includes(input.status)) throw new Error('Invalid status');
-      updateTask.status = input.status;
-    }
-    if (Object.prototype.hasOwnProperty.call(input, 'assigneeUsername')) updateTask.assigneeUserID = assigneeUserID;
-    if (Object.prototype.hasOwnProperty.call(input, 'sprintNumber')) updateTask.sprintID = sprintID;
-    if (Object.prototype.hasOwnProperty.call(input, 'projectName')) {
-      updateTask.projectID = projectID;
+      if (!allowedStatuses.includes(args.status)) throw new Error('Invalid status');
+      updateTask.status = args.status;
     }
 
     await task.update(updateTask);
 
-    // return updated task 
-    const includes = [];
-    includes.push({ model: db.User, as: 'reporter', attributes: ['userID', 'username', 'email'] });
-    includes.push({ model: db.User, as: 'assignee', attributes: ['userID', 'username', 'email'] });
-    includes.push({ model: db.Sprint, as: 'sprint', attributes: ['sprintID', 'number'] });
-    includes.push({ model: db.Project, as: 'project', attributes: ['projectID', 'name'] });
-
-    const updatedTask = await db.Task.findByPk(task.taskID, { include: includes });
-    
-    return updatedTask;
+    return db.Task.findByPk(task.taskID, {
+      include: [
+        { model: db.Project, as: 'project' },
+        { model: db.Sprint, as: 'sprint' },
+        { model: db.User, as: 'reporter' },
+        { model: db.User, as: 'assignee' },
+      ],
+    });
   },
 };
