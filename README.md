@@ -206,12 +206,6 @@ Equivalence classes are documented per field and grouped by entity, with represe
            - expectedOutputDomain: error "User already has this role"
 
 
-
-
-
-
-
-
 #### 3.1.2. Projects
 
 1. Create (createProjectMutation)
@@ -418,6 +412,399 @@ Equivalence classes are documented per field and grouped by entity, with represe
            - expectedOutputDomain: error "User was not assigned to this project or project/user not found"
 
 
+#### 3.1.3. Sprints
+
+##### 1. Create (createSprintMutation)
+    - context
+       - adminManagerContextClass (valid)
+           - rule: viewerHasAdminOrManagerRole
+           - representativeInput: roles=["Manager"]
+           - expectedOutputDomain: success
+       - nonAdminManagerClass (invalid)
+           - rule: viewerNotAdminOrManager
+           - representativeInput: roles=["Employee"]
+           - expectedOutputDomain: error "Not authorized"
+
+    - sprintNumber
+        - sprintNumberValidClass (valid)
+            - rule: integerGreaterOrEqual1
+            - representativeInput: sprintNumber=1
+            - expectedOutputDomain: success
+        - sprintNumberMissingClass (invalid)
+            - rule: sprintNumberEmptyOrMissing
+            - representativeInput: sprintNumber=undefined
+            - expectedOutputDomain: error "Sprint number is required"
+        - sprintNumberZeroOrNegativeClass (invalid)
+            - rule: sprintNumberLessThan1
+            - representativeInput: sprintNumber=0
+            - expectedOutputDomain: error "Sprint number must be greater than or equal to 1"
+        - duplicateNumberInProjectClass (invalid)
+            - rule: sprintNumberAlreadyExistsInTargetProject
+            - representativeInput: sprintNumber=1 (already used)
+            - expectedOutputDomain: error "Sprint number already exists in project"
+        - nonIntegerSprintNumberClass (invalid)
+            - rule: sprintNumberNotInteger
+            - representativeInput: sprintNumber=2.5
+            - expectedOutputDomain: error "Sprint number must be an integer"
+
+    - description
+        - descriptionValidClass (valid)
+            - rule: lengthInRangeOrMissing
+            - representativeInput: description="Short description"
+            - expectedOutputDomain: success
+        - descriptionTooLongClass (invalid)
+            - rule: descriptionLengthGreaterThan2000
+            - representativeInput: description='a'*2001
+            - expectedOutputDomain: error "Sprint description must be at most 2000 characters"
+
+    - startDate / endDate
+        - validDatesClass (valid)
+            - rule: bothDatesValidAndStartBeforeEnd
+            - representativeInput: startDate="2026-01-01", endDate="2026-01-14"
+            - expectedOutputDomain: success
+        - invalidDateFormatClass (invalid)
+            - rule: dateNotParsable
+            - representativeInput: startDate="not-a-date"
+            - expectedOutputDomain: error "Invalid date format"
+        - missingStartOrEndClass (invalid)
+            - rule: emptyStringProvidedForDate
+            - representativeInput: startDate=""
+            - expectedOutputDomain: error "Start date is required" (or "End date is required")
+        - startAfterEndClass (invalid)
+            - rule: startDateOnOrAfterEndDate
+            - representativeInput: startDate="2026-01-15", endDate="2026-01-15"
+            - expectedOutputDomain: error "Start date must be before end date"
+
+    - projectID
+        - projectValidClass (valid)
+            - rule: projectExistsOrNullAllowed
+            - representativeInput: projectID=1
+            - expectedOutputDomain: success
+        - projectNotFoundClass (invalid)
+            - rule: projectDoesNotExist
+            - representativeInput: projectID=999
+            - expectedOutputDomain: error "Project not found"
+
+##### 2. Update (updateSprintMutation)
+    - context
+       - adminManagerContextClass (valid)
+           - rule: viewerHasAdminOrManagerRole
+           - representativeInput: roles=["Manager"]
+           - expectedOutputDomain: success
+       - nonAdminManagerClass (invalid)
+           - rule: viewerNotAdminOrManager
+           - representativeInput: roles=["Employee"]
+           - expectedOutputDomain: error "Not authorized"
+
+    - sprintNumber
+        - sprintNumberValidClass (valid)
+            - rule: integerGreaterOrEqual1
+            - representativeInput: sprintNumber=1
+            - expectedOutputDomain: success
+        - sprintNumberMissingClass (invalid)
+            - rule: sprintNumberEmptyOrMissing
+            - representativeInput: sprintNumber=undefined
+            - expectedOutputDomain: error "Sprint number is required"
+        - sprintNumberZeroOrNegativeClass (invalid)
+            - rule: sprintNumberLessThan1
+            - representativeInput: sprintNumber=0
+            - expectedOutputDomain: error "Sprint number must be greater than or equal to 1"
+        - duplicateNumberInProjectClass (invalid)
+            - rule: sprintNumberAlreadyExistsInTargetProject
+            - representativeInput: sprintNumber=1 (already used)
+            - expectedOutputDomain: error "Sprint number already exists in project"
+        - nonIntegerSprintNumberClass (invalid)
+            - rule: sprintNumberNotInteger
+            - representativeInput: sprintNumber=2.5
+            - expectedOutputDomain: error "Sprint number must be an integer"
+
+    - description
+        - descriptionValidClass (valid)
+            - rule: lengthInRangeOrMissing
+            - representativeInput: description="Short description"
+            - expectedOutputDomain: success
+        - descriptionTooLongClass (invalid)
+            - rule: descriptionLengthGreaterThan2000
+            - representativeInput: description='a'*2001
+            - expectedOutputDomain: error "Sprint description must be at most 2000 characters"
+
+    - startDate / endDate
+        - validDatesClass (valid)
+            - rule: bothDatesValidAndStartBeforeEnd
+            - representativeInput: startDate="2026-01-01", endDate="2026-01-14"
+            - expectedOutputDomain: success
+        - invalidDateFormatClass (invalid)
+            - rule: dateNotParsable
+            - representativeInput: startDate="not-a-date"
+            - expectedOutputDomain: error "Invalid date format"
+        - missingStartOrEndClass (invalid)
+            - rule: emptyStringProvidedForDate
+            - representativeInput: startDate=""
+            - expectedOutputDomain: error "Start date is required" (or "End date is required")
+        - startAfterEndClass (invalid)
+            - rule: startDateOnOrAfterEndDate
+            - representativeInput: startDate="2026-01-15", endDate="2026-01-15"
+            - expectedOutputDomain: error "Start date must be before end date"
+
+    - projectID
+        - projectValidClass (valid)
+            - rule: projectExistsOrNullAllowed
+            - representativeInput: projectID=1
+            - expectedOutputDomain: success
+        - projectNullClass (valid)
+            - rule: explicitNullProjectAllowed
+            - representativeInput: sprintNumber=3, projectID=null
+            - expectedOutputDomain: success
+        - projectNotFoundClass (invalid)
+            - rule: projectDoesNotExist
+            - representativeInput: projectID=999
+            - expectedOutputDomain: error "Project not found"
+
+##### 3. Delete (deleteSprintMutation)
+   - context
+       - adminManagerContextClass (valid)
+           - rule: viewerHasAdminOrManagerRole
+           - representativeInput: roles=["Manager"]
+           - expectedOutputDomain: success
+       - nonAdminClass (invalid)
+           - rule: viewerNotAdminOrManager
+           - representativeInput: roles=["Employee"]
+           - expectedOutputDomain: error "Not authorized"
+
+   - sprintID
+       - sprintExistsClass (valid)
+           - rule: sprintExists
+           - representativeInput: sprintID=1
+           - expectedOutputDomain: success
+       - sprintNotFoundClass (invalid)
+           - rule: sprintDoesNotExist
+           - representativeInput: sprintID=999
+           - expectedOutputDomain: error "Sprint not found"
+
+
+#### 3.1.4. Tasks
+
+##### 1. Create (createTaskMutation)
+    - name
+        - nameValidClass (valid)
+            - rule: property present, trimmed non-empty, length <= 200
+            - representativeInput: name="Task name"
+            - expectedOutputDomain: success
+        - nameMissingClass (invalid)
+            - rule: property missing or trimmed empty
+            - representativeInput: (no name property) or name="  "
+            - expectedOutputDomain: error "Task name is required"
+        - nameTooLongClass (invalid)
+            - rule: length > 200
+            - representativeInput: name of length 201
+            - expectedOutputDomain: error "Task name must be at most 200 characters"
+
+    - description
+        - descriptionValidClass (valid)
+            - rule: property present, trimmed non-empty, length <= 2000
+            - representativeInput: description="Task description"
+            - expectedOutputDomain: success
+        - descriptionMissingPropertyClass (invalid)
+            - rule: property missing
+            - representativeInput: (no description property)
+            - expectedOutputDomain: error "Task description is required"
+        - descriptionNullOrEmptyClass (invalid)
+            - rule: property null or trimmed empty
+            - representativeInput: description=null or description="   "
+            - expectedOutputDomain: error "Task description is required"
+        - descriptionTooLongClass (invalid)
+            - rule: length > 2000
+            - representativeInput: description of length 2001
+            - expectedOutputDomain: error "Task description must be at most 2000 characters"
+
+    - status
+        - statusValidClass (valid)
+            - rule: inAllowedSet
+            - representativeInput: status="Open"
+            - expectedOutputDomain: success
+        - statusInvalidClass (invalid)
+            - rule: notInAllowedSet
+            - representativeInput: status="NonExistentStatus"
+            - expectedOutputDomain: error "Invalid status"
+
+    - assigneeUsername
+        - assigneeValidClass (valid)
+            - rule: userExistsOrNullAllowed
+            - expectedOutputDomain: success
+        - assigneeNotFoundClass (invalid)
+            - rule: assigneeDoesNotExist
+            - representativeInput: assigneeUsername="NonExistentUser"
+            - expectedOutputDomain: error "Assignee not found"
+
+    - projectName
+        - projectValidClass (valid)
+            - rule: property present, trimmed non-empty, resolves to project
+            - representativeInput: projectName="TaskProj1"
+            - expectedOutputDomain: success
+        - projectMissingPropertyClass (invalid)
+            - rule: property missing or trimmed empty
+            - representativeInput: (no projectName) or projectName="  "
+            - expectedOutputDomain: error "Project name is required"
+        - projectNullClass (invalid)
+            - rule: property null
+            - representativeInput: projectName=null
+            - expectedOutputDomain: error "Project name is required"
+
+    - sprintNumber
+        - sprintValidClass (valid)
+            - rule: numeric, resolves to sprint by `number` within project context
+            - representativeInput: sprintNumber=1
+            - expectedOutputDomain: success
+        - sprintNotFoundClass (invalid)
+            - rule: sprint not found for given project
+            - representativeInput: sprintNumber=9999
+            - expectedOutputDomain: error "Sprint not found"
+        - sprintNonNumericClass (invalid)
+            - rule: non-numeric value
+            - representativeInput: sprintNumber="abc"
+            - expectedOutputDomain: error "Sprint not found"
+
+##### 2. Update (updateTaskMutation)
+    - name
+        - nameValidClass (valid)
+            - rule: property present, trimmed non-empty, length <= 200
+            - representativeInput: name="Task name"
+            - expectedOutputDomain: success
+        - nameMissingClass (invalid)
+            - rule: property missing or trimmed empty
+            - representativeInput: (no name property) or name="  "
+            - expectedOutputDomain: error "Task name is required"
+        - nameTooLongClass (invalid)
+            - rule: length > 200
+            - representativeInput: name of length 201
+            - expectedOutputDomain: error "Task name must be at most 200 characters"
+
+    - description
+        - descriptionValidClass (valid)
+            - rule: property present, trimmed non-empty, length <= 2000
+            - representativeInput: description="Task description"
+            - expectedOutputDomain: success
+        - descriptionMissingPropertyClass (invalid)
+            - rule: property missing
+            - representativeInput: (no description property)
+            - expectedOutputDomain: error "Task description is required"
+        - descriptionNullOrEmptyClass (invalid)
+            - rule: property null or trimmed empty
+            - representativeInput: description=null or description="   "
+            - expectedOutputDomain: error "Task description is required"
+        - descriptionTooLongClass (invalid)
+            - rule: length > 2000
+            - representativeInput: description of length 2001
+            - expectedOutputDomain: error "Task description must be at most 2000 characters"
+
+    - status
+        - statusValidClass (valid)
+            - rule: inAllowedSet
+            - representativeInput: status="Open"
+            - expectedOutputDomain: success
+        - statusInvalidClass (invalid)
+            - rule: notInAllowedSet
+            - representativeInput: status="NonExistentStatus"
+            - expectedOutputDomain: error "Invalid status"
+
+    - assigneeUsername
+        - assigneeValidClass (valid)
+            - rule: userExistsOrNullAllowed
+            - expectedOutputDomain: success
+        - assigneeNotFoundClass (invalid)
+            - rule: assigneeDoesNotExist
+            - representativeInput: assigneeUsername="NonExistentUser"
+            - expectedOutputDomain: error "Assignee not found"
+
+    - projectName
+        - projectValidClass (valid)
+            - rule: property present, trimmed non-empty, resolves to project
+            - representativeInput: projectName="TaskProj1"
+            - expectedOutputDomain: success
+        - projectMissingPropertyClass (invalid)
+            - rule: property missing or trimmed empty
+            - representativeInput: (no projectName) or projectName="  "
+            - expectedOutputDomain: error "Project name is required"
+        - projectNullClass (invalid)
+            - rule: property null
+            - representativeInput: projectName=null
+            - expectedOutputDomain: error "Project name is required"
+
+    - sprintNumber
+        - sprintValidClass (valid)
+            - rule: numeric, resolves to sprint by `number` within project context
+            - representativeInput: sprintNumber=1
+            - expectedOutputDomain: success
+        - sprintNotFoundClass (invalid)
+            - rule: sprint not found for given project
+            - representativeInput: sprintNumber=9999
+            - expectedOutputDomain: error "Sprint not found"
+        - sprintNonNumericClass (invalid)
+            - rule: non-numeric value
+            - representativeInput: sprintNumber="abc"
+            - expectedOutputDomain: error "Sprint not found"
+        - sprintNumberNullClass (valid)
+            - rule: property present with explicit null → clears sprint
+            - representativeInput: sprintNumber=null
+            - expectedOutputDomain: success
+
+##### 3. Delete (deleteTaskMutation)
+   - context
+       - adminManagerContextClass (valid)
+           - rule: viewerHasAdminOrManagerRole
+           - representativeInput: roles=["Manager"]
+           - expectedOutputDomain: success
+       - nonAllowedUserClass (invalid)
+           - rule: viewerNotAllowedToDelete
+           - representativeInput: roles=["Employee"]
+           - expectedOutputDomain: error "Not authorized"
+
+   - taskID
+       - taskExistsClass (valid)
+           - rule: taskExists
+           - representativeInput: taskID=1
+           - expectedOutputDomain: success
+       - taskNotFoundClass (invalid)
+           - rule: taskDoesNotExist
+           - representativeInput: taskID=99999
+           - expectedOutputDomain: error "Task not found"
+
+##### 4. Assign Task (assignTaskMutation)
+    - assigneeUsername
+        - assigneeValidClass (valid)
+            - rule: property present, trimmed non-empty, resolves to user
+            - representativeInput: assigneeUsername="assignee"
+            - expectedOutputDomain: success
+        - assigneeMissingOrEmptyClass (invalid)
+            - rule: property missing or trimmed empty
+            - representativeInput: (no assigneeUsername) or assigneeUsername=""
+            - expectedOutputDomain: error "Assignee is required"
+        - assigneeNotFoundClass (invalid)
+            - rule: username does not resolve
+            - representativeInput: assigneeUsername="NonExistentUser"
+            - expectedOutputDomain: error "Assignee not found"
+
+
+##### 5. Change task status (changeTaskStatusMutation)
+    - status
+        - statusValidClass (valid)
+            - rule: property present (hasOwnProperty), non-null, value in allowed set
+            - representativeInput: status="InProgress"
+            - expectedOutputDomain: success
+        - statusMissingPropertyClass (invalid)
+            - rule: property missing
+            - representativeInput: (no status property)
+            - expectedOutputDomain: error "Status is required"
+        - statusNullClass (invalid)
+            - rule: property present but null
+            - representativeInput: status=null
+            - expectedOutputDomain: error "Status is required"
+        - statusInvalidClass (invalid)
+            - rule: value not in allowed set
+            - representativeInput: status="Bad"
+            - expectedOutputDomain: error "Invalid status"
+
+    
 
 
 
@@ -443,6 +830,36 @@ Equivalence classes are documented per field and grouped by entity, with represe
     - description length: 500 (valid) / 501 (invalid)
     - projectID existence: existingId (valid) / missingId (invalid)
     - repositoryID existence: existingId (valid) / nonExistingId (invalid)
+
+#### 3.2.3. Sprints
+1. Create (createSprintMutation) boundaries
+    - sprintNumber: 0 (invalid) / 1 (valid)
+    - description length: 2000 (valid) / 2001 (invalid)
+    - projectID existence: existingId (valid) / nonExistingId (invalid)
+    - start date < end date
+2. Update (updateSprintMutation) boundaries
+    - sprintNumber: 0 (invalid) / 1 (valid)
+    - description length: 2000 (valid) / 2001 (invalid)
+    - projectID existence: existingId (valid) / nonExistingId (invalid)
+    - start date < end date
+
+#### 3.2.4. Tasks
+1. Create (createTaskMutation) boundaries
+    - name length: 200 (valid) / 201 (invalid)
+    - description length: 2000 (valid) / 2001 (invalid)
+    - status: 'Open', 'In Progress', 'Done', 'Closed' (valid) / 'Invalid' (invalid)
+    - assigneeUsername existence: existingUsername (valid) / nonExistingUsername (invalid)
+    - projectName existence: existingName (valid) / nonExistingName (invalid)
+    - sprintNumber existence: existingId (valid) / nonExistingId (invalid)
+
+2. Update (updateTaskMutation) boundaries
+    - name length: 200 (valid) / 201 (invalid)
+    - description length: 2000 (valid) / 2001 (invalid)
+    - status: 'Open', 'In Progress', 'Done', 'Closed' (valid) / 'Invalid' (invalid)
+    - assigneeUsername existence: existingUsername (valid) / nonExistingUsername (invalid)
+    - projectName existence: existingName (valid) / nonExistingName (invalid)
+    - sprintNumber existence: existingId (valid) / nonExistingId (invalid)
+
 
 ### 3.3. Category Partitioning
 
@@ -575,6 +992,156 @@ Note: test cases are derived by combining exactly one choice from each category.
      - oneValidAtATime
          - removeUserFromProjectAllValid, removeUserFromProjectNonAdmin, removeUserFromProjectLinkNotFound
 
+#### 3.3.3. Sprints
+
+1. Create (createSprintMutation)
+   - prunedCategories
+       - descriptionCategory: validAndMissingMerged (both map to success)
+       - startEndDateCategory: validAndMissingMerged (both map to success when provided correctly)
+   - categories
+       - contextCategory
+       - sprintNumberCategory
+       - descriptionCategory
+       - startDateCategory
+       - endDateCategory
+       - projectIDCategory
+   - representativeValues
+       - contextCategory: adminOrManager=["Manager"], nonAdmin=["Employee"]
+       - sprintNumberCategory: valid=1, missing=undefined, zeroOrNegative=0, duplicateInProject=1 (already exists), nonInteger=2.5
+       - descriptionCategory: valid="Short description", tooLong='a'*2001, missing=''
+       - startDateCategory: valid="2026-01-01", invalidFormat="not-a-date", missing=''
+       - endDateCategory: valid="2026-01-14", invalidFormat="not-a-date", missing=''
+       - projectIDCategory: valid=1, missing=null, notFound=999
+   - oneValidAtATime
+       - createSprintAllValid, createSprintNonAdmin, createSprintNumberMissing, createSprintNumberZeroOrNegative, createSprintNumberDuplicate, createSprintNumberNonInteger, createSprintDescriptionTooLong, createSprintStartInvalidFormat, createSprintEndInvalidFormat, createSprintProjectNotFound
+
+2. Update (updateSprintMutation)
+   - prunedCategories
+       - descriptionCategory: validAndMissingMerged
+       - startEndDateCategory: validAndMissingMerged
+   - categories
+       - contextCategory
+       - sprintIDCategory
+       - sprintNumberCategory
+       - descriptionCategory
+       - startDateCategory
+       - endDateCategory
+       - projectIDCategory
+   - representativeValues
+       - contextCategory: adminOrManager=["Manager"], nonAdmin=["Employee"]
+       - sprintIDCategory: exists=1, notFound=999
+       - sprintNumberCategory: valid=1, missing=undefined, duplicateInProject=1, nonInteger=2.5
+       - descriptionCategory: valid="Short description", tooLong='a'*2001, missing=''
+       - startDateCategory: valid="2026-01-01", invalidFormat="not-a-date", missing=''
+       - endDateCategory: valid="2026-01-14", invalidFormat="not-a-date", missing=''
+       - projectIDCategory: valid=1, nullAllowed=null, notFound=999
+   - oneValidAtATime
+       - updateSprintAllValid, updateSprintNonAdmin, updateSprintNotFound, updateSprintNumberDuplicate, updateSprintNumberNonInteger, updateSprintDescriptionTooLong, updateSprintStartInvalidFormat, updateSprintEndInvalidFormat, updateSprintProjectNotFound
+
+3. Delete (deleteSprintMutation)
+   - prunedCategories
+       - none
+   - categories
+       - contextCategory
+       - sprintIDCategory
+   - representativeValues
+       - contextCategory: adminOrManager=["Manager"], nonAdmin=["Employee"]
+       - sprintIDCategory: exists=1, notFound=999
+   - oneValidAtATime
+       - deleteSprintAllValid, deleteSprintNonAdmin, deleteSprintNotFound
+
+#### 3.3.4. Tasks
+
+##### 1. Create (createTaskMutation)
+    - prunedCategories
+        - descriptionCategory: validAndMissingMerged
+        - assigneeCategory: nullAndValidMerged
+    - categories
+        - contextCategory
+        - nameCategory
+        - descriptionCategory
+        - statusCategory
+        - assigneeUsernameCategory
+        - projectNameCategory
+        - sprintNumberCategory
+    - representativeValues
+        - contextCategory: adminManagerOrUser=["Manager"], other=["Employee"]
+        - nameCategory: valid="Task name", missing=undefined, tooLong='N'*201
+        - descriptionCategory: valid="Task description", missing=undefined, tooLong='D'*2001
+        - statusCategory: valid='Open'/'In Progress'/'Done'/'Closed', invalid='Invalid'
+        - assigneeUsernameCategory: valid='alice', missing=null, notFound='NonExistentUser'
+        - projectNameCategory: valid='TaskProj', missing=undefined, notFound='NonExistentProject'
+        - sprintNumberCategory: valid=1, missing=undefined, notFound=9999, nonNumeric='abc'
+    - oneValidAtATime
+        - createTaskAllValid, createTaskNameMissing, createTaskNameTooLong, createTaskDescriptionTooLong, createTaskStatusInvalid, createTaskAssigneeNotFound, createTaskProjectNotFound, createTaskSprintNotFound, createTaskSprintNonNumeric
+
+##### 2. Update (updateTaskMutation)
+    - prunedCategories
+        - descriptionCategory: validAndMissingMerged
+        - assigneeCategory: nullAndValidMerged
+    - categories
+        - contextCategory
+        - taskIDCategory
+        - nameCategory
+        - descriptionCategory
+        - statusCategory
+        - assigneeUsernameCategory
+        - projectNameCategory
+        - sprintNumberCategory
+    - representativeValues
+        - contextCategory: adminManagerOrUser=["Manager"], other=["Employee"]
+        - taskIDCategory: exists=1, notFound=99999
+        - nameCategory: valid='Task name', missing=undefined, tooLong='N'*201
+        - descriptionCategory: valid='Task description', missing=undefined, tooLong='D'*2001
+        - statusCategory: valid='Open'/'In Progress'/'Done'/'Closed', invalid='Invalid'
+        - assigneeUsernameCategory: valid='alice', missing=null, notFound='NonExistentUser'
+        - projectNameCategory: valid='TaskProj', missing=undefined, notFound='NonExistentProject'
+        - sprintNumberCategory: valid=1, missing=undefined, notFound=9999, nonNumeric='abc'
+    - oneValidAtATime
+        - updateTaskAllValid, updateTaskNotFound, updateTaskNameMissing, updateTaskNameTooLong, updateTaskDescriptionTooLong, updateTaskStatusInvalid, updateTaskAssigneeNotFound, updateTaskProjectNotFound, updateTaskSprintNotFound, updateTaskSprintNonNumeric
+
+##### 3. Delete (deleteTaskMutation)
+    - prunedCategories
+        - none
+    - categories
+        - contextCategory
+        - taskIDCategory
+    - representativeValues
+        - contextCategory: adminOrManager=["Manager"], nonAllowed=["Employee"]
+        - taskIDCategory: exists=1, notFound=99999
+    - oneValidAtATime
+        - deleteTaskAllValid, deleteTaskNonAdmin, deleteTaskNotFound
+
+##### 4. Assign Task to Sprint (assignTaskToSprintMutation)
+    - prunedCategories
+        - none
+    - categories
+        - contextCategory
+        - taskIDCategory
+        - assigneeUsernameCategory
+    - representativeValues
+        - contextCategory: adminManagerOrUser=["Manager"], other=["Employee"]
+        - taskIDCategory: exists=1, notFound=99999
+        - assigneeUsernameCategory: valid='alice', missing='', notFound='NonExistentUser'
+    - oneValidAtATime
+        - assignTaskAllValid, assignTaskTaskNotFound, assignTaskAssigneeMissing, assignTaskAssigneeNotFound, assignTaskUnauthorized
+
+##### 5. Change task status (changeTaskStatusMutation)
+    - prunedCategories
+        - none
+    - categories
+        - contextCategory
+        - taskIDCategory
+        - statusCategory
+    - representativeValues
+        - contextCategory: adminManagerOrUser=["Manager"]
+        - taskIDCategory: exists=1, notFound=99999
+        - statusCategory: valid='Open'/'In Progress'/'Done'/'Closed', missingProperty=(input lacks `status`), nullStatus=null, invalid='Invalid'
+    - oneValidAtATime
+        - changeTaskStatusAllValid, changeTaskStatusTaskNotFound, changeTaskStatusMissingStatusProp, changeTaskStatusNullStatus, changeTaskStatusInvalidStatus, changeTaskStatusUnauthorized
+
+
+
 
 ### 3.4 Control Flow and Coverage Metrics
 We used Jest's coverage option (--coverage) to instrument the code and produce a summary plus an HTML report under ./coverage.
@@ -604,7 +1171,7 @@ Path diagrams are documented in _diagrams.
 
 ### 4.1 Mutation Generator Setup and Execution
 We use Stryker as the mutation generator, configured in stryker.conf.js and executed via npm run test:mutation.
-Targets include Users/Projects mutations and queries plus authorization and JWT middleware.
+Targets include Users/Projects/Sprints/Tasks mutations and queries plus authorization and JWT middleware.
 Configuration highlights:
 - Mutate patterns: graphql/mutations/**/*user*.js, graphql/mutations/**/*project*.js, graphql/queries/**/*user*.js, graphql/queries/**/*project*.js, utils/authorize.js, middlewares/jwtMiddleware.js
 - Test runner: Jest (custom project), using jest.config.js
