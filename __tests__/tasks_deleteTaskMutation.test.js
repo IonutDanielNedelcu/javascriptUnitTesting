@@ -99,4 +99,40 @@ describe('tasks_deleteTaskMutation', () => {
     const deleted = await db.Task.findByPk(task.taskID);
     expect(deleted).toBeNull();
   });
+
+  // TEST 4
+  test('deleteTaskAllValidAsAdmin', async () => {
+    const admin = await createUserWithRoles({
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
+      roles: ['Admin'],
+    });
+
+    const project = await createProject({ 
+      name: 'TaskProj4',
+      description: "Short description",
+      repositoryID: null,
+    });
+    
+    const task = await createTask({ 
+      name: 'Task name', 
+      description: 'Task description', 
+      status: 'Open', 
+      reporterUserID: admin.userID, 
+      projectID: project.projectID 
+    });
+
+    const res = await executeGraphql({ 
+      source: deleteTaskMutation, 
+      variableValues: { taskID: task.taskID }, 
+      contextUser: buildContextUser(admin) 
+    });    
+
+    expect(res.errors).toBeUndefined();
+    expect(res.data.deleteTask).toBe("Task deleted");
+
+    const deleted = await db.Task.findByPk(task.taskID);
+    expect(deleted).toBeNull();
+  });
 });

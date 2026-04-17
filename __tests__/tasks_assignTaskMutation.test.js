@@ -51,14 +51,47 @@ describe('tasks_assignTaskMutation', () => {
       assigneeUsername: assignee.username 
     };
 
-    const res = await executeGraphql({ 
-      source: assignTaskMutation, 
-      variableValues: { input }, 
-      contextUser: buildContextUser(manager) 
+    // Replace Task.findByPk temporarily to see the include array
+    const helpersDb = require('./helpers').db;
+    const originalFindByPk = helpersDb.Task.findByPk;
+    let capturedInclude = null;
+
+    helpersDb.Task.findByPk = async function (id, opts) {
+      if (opts && opts.include) {
+        capturedInclude = opts.include;
+      }
+      return originalFindByPk.call(this, id, opts);
+    };
+
+    const res = await executeGraphql({
+      source: assignTaskMutation,
+      variableValues: { input },
+      contextUser: buildContextUser(manager),
     });
+
+    helpersDb.Task.findByPk = originalFindByPk;
 
     expect(res.errors).toBeUndefined();
     expect(res.data.assignTask.assignee.userID).toBe(assignee.userID);
+
+    // Check the captured include array has the attributes
+    expect(capturedInclude).toBeDefined();
+    const asMap = {};
+    for (const inc of capturedInclude) {
+      asMap[inc.as] = inc;
+    }
+
+    expect(asMap.reporter).toBeDefined();
+    expect(asMap.reporter.attributes).toEqual(['userID', 'username', 'email']);
+
+    expect(asMap.assignee).toBeDefined();
+    expect(asMap.assignee.attributes).toEqual(['userID', 'username', 'email']);
+
+    expect(asMap.sprint).toBeDefined();
+    expect(asMap.sprint.attributes).toEqual(['sprintID', 'number']);
+
+    expect(asMap.project).toBeDefined();
+    expect(asMap.project.attributes).toEqual(['projectID', 'name']);
   });
 
   // TEST 2

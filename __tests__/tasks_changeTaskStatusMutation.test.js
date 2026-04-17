@@ -39,19 +39,42 @@ describe('tasks_changeTaskStatusMutation', () => {
       projectID: project.projectID,
     });
 
-    const input = { 
-      taskID: task.taskID, 
-      status: 'In Progress' 
+    const helpersDb = require('./helpers').db;
+    const originalFindByPk = helpersDb.Task.findByPk;
+    let capturedInclude = null;
+    helpersDb.Task.findByPk = async (id, opts) => {
+      if (opts && opts.include) {
+        capturedInclude = opts.include;
+      }
+      return originalFindByPk.call(helpersDb.Task, id, opts);
     };
 
-    const res = await executeGraphql({ 
-      source: changeStatusMutation, 
-      variableValues: { input }, 
-      contextUser: buildContextUser(manager) 
-    });
+    const allowedStatuses = ['Open', 'In Progress', 'Done', 'Closed'];
+    for (const status of allowedStatuses) {
+      const input = { taskID: task.taskID, status: status };
+      const res = await executeGraphql({
+        source: changeStatusMutation,
+        variableValues: { input },
+        contextUser: buildContextUser(manager),
+      });
+      expect(res.errors).toBeUndefined();
+      expect(res.data.changeTaskStatus.status).toBe(status);
+    }
 
-    expect(res.errors).toBeUndefined();
-    expect(res.data.changeTaskStatus.status).toBe('In Progress');
+    helpersDb.Task.findByPk = originalFindByPk;
+
+    // Verify include attributes
+    expect(capturedInclude).toBeDefined();
+    const asMap = {};
+    for (const inc of capturedInclude) asMap[inc.as] = inc;
+    expect(asMap.reporter).toBeDefined();
+    expect(asMap.reporter.attributes).toEqual(['userID','username','email']);
+    expect(asMap.assignee).toBeDefined();
+    expect(asMap.assignee.attributes).toEqual(['userID','username','email']);
+    expect(asMap.sprint).toBeDefined();
+    expect(asMap.sprint.attributes).toEqual(['sprintID','number']);
+    expect(asMap.project).toBeDefined();
+    expect(asMap.project.attributes).toEqual(['projectID','name']);
   });
 
   // TEST 2
@@ -115,8 +138,43 @@ describe('tasks_changeTaskStatusMutation', () => {
     });
 
     const input = { 
-      taskID: task.taskID, 
-      status: null 
+      taskID: task.taskID
+    };
+
+    const res = await executeGraphql({ 
+      source: changeStatusMutation, 
+      variableValues: { input }, 
+      contextUser: buildContextUser(manager) 
+    });
+    
+    expect(res.errors[0].message).toBe('Status is required');
+  });
+
+  test('statusTransitionNullStatus', async () => {
+    const manager = await createUserWithRoles({
+      email: 'manager@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'manager',
+      roles: ['Manager'],
+    });
+
+    const project = await createProject({
+      name: 'ChangeStatusProj3',
+      description: 'Short description',
+      repositoryID: null,
+    });
+
+    const task = await createTask({
+      name: 'Task name',
+      description: 'Task description',
+      status: 'Open',
+      reporterUserID: manager.userID,
+      projectID: project.projectID,
+    });
+
+    const input = { 
+      taskID: task.taskID,
+      status: null
     };
 
     const res = await executeGraphql({ 

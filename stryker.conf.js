@@ -11,6 +11,18 @@ module.exports = {
     'graphql/mutations/deleteProjectMutation.js',
     'graphql/mutations/removeUserFromProjectMutation.js',
     'graphql/mutations/addUserToProjectMutation.js',
+
+    // for sprints
+    'graphql/mutations/createSprintMutation.js',
+    'graphql/mutations/updateSprintMutation.js',
+    'graphql/mutations/deleteSprintMutation.js',
+    
+    // for tasks
+    'graphql/mutations/createTaskMutation.js',
+    'graphql/mutations/updateTaskMutation.js',
+    'graphql/mutations/deleteTaskMutation.js',
+    'graphql/mutations/assignTaskMutation.js',
+    'graphql/mutations/changeTaskStatusMutation.js',
   ],
   concurrency: 1,
   testRunner: 'jest',

@@ -49,8 +49,8 @@ describe('sprints_deleteSprintMutation', () => {
      });
     const sprint = await createSprint({ 
       sprintNumber: 1, 
-      startDate: '2026-05-01', 
-      endDate: '2026-05-14', 
+      startDate: '2026-01-01', 
+      endDate: '2026-01-14', 
       projectID: project.projectID 
     });
 
@@ -78,9 +78,9 @@ describe('sprints_deleteSprintMutation', () => {
       repositoryID: null,
      });
     const sprint = await createSprint({ 
-      sprintNumber: 2, 
-      startDate: '2026-06-01', 
-      endDate: '2026-06-14', 
+      sprintNumber: 1, 
+      startDate: '2026-01-01', 
+      endDate: '2026-01-14', 
       projectID: project.projectID 
     });
 
@@ -88,6 +88,41 @@ describe('sprints_deleteSprintMutation', () => {
       source: deleteSprintMutation,
       variableValues: { sprintID: sprint.sprintID },
       contextUser: buildContextUser(manager),
+    });
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.deleteSprint).toBe("Sprint deleted");
+
+    const deleted = await db.Sprint.findByPk(sprint.sprintID);
+    expect(deleted).toBeNull();
+  });
+
+  // TEST 4
+  test('deleteSprintAsAdmin', async () => {
+    const admin = await createUserWithRoles({
+      email: 'admin@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'admin',
+      roles: ['Admin'],
+    });
+
+    const project = await createProject({ 
+      name: 'DeleteSprintProj',
+      description: "Short description",
+      repositoryID: null,
+    });
+
+    const sprint = await createSprint({ 
+      sprintNumber: 1, 
+      startDate: '2026-01-01', 
+      endDate: '2026-01-14', 
+      projectID: project.projectID 
+    });
+
+    const result = await executeGraphql({
+      source: deleteSprintMutation,
+      variableValues: { sprintID: sprint.sprintID },
+      contextUser: buildContextUser(admin),
     });
 
     expect(result.errors).toBeUndefined();
