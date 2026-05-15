@@ -706,4 +706,33 @@ describe('users_registerMutation', () => {
     expect(result.data.register.user.lastName).toBe(maxLastName);
   });
 
+  test('registerHashesPasswordWithCorrectRounds', async () => {
+    const bcrypt = require('bcrypt');
+    const originalHash = bcrypt.hash;
+    let capturedRounds = null;
+
+    bcrypt.hash = jest.fn().mockImplementation(async (data, rounds) => {
+      capturedRounds = rounds;
+      return originalHash(data, 1);
+    });
+
+    const input = {
+      email: 'bcrypttest@studybuddies.com',
+      password: 'StudyBuddies_123',
+      username: 'bcrypttest',
+      firstName: 'Bcrypt',
+      lastName: 'Test',
+    };
+
+    const result = await executeGraphql({
+      source: registerMutation,
+      variableValues: { input },
+    });
+
+    bcrypt.hash = originalHash;
+
+    expect(result.errors).toBeUndefined();
+    expect(capturedRounds).toBe(10);
+  });
+
 });
