@@ -1349,3 +1349,5 @@ Tests were added, for example, for the structure of Sequelize query calls (`capt
 * Google Gemini (https://gemini.google.com, last accessed May 2026)
 
 Note: Anthropic Claude, GitHub Copilot, and Google Gemini, were used in this project for: code synthesis, code writing, test writing (see [AI Report](./ai_report.md)), documentation structure and wording.
+
+Note: Code running recordings can be found at https://drive.google.com/drive/folders/11SfP9aTnR0NSalaPMbJtbuOT90CzzMUO?usp=sharing
