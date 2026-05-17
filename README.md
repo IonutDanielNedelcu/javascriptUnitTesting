@@ -1,6 +1,20 @@
 # Unit Testing &amp; Mutation Analysis in JavaScript
 
 ---
+
+## Table of Contents
+
+1. [Introduction](#1-introduction)
+2. [Environment and Configuration](#2-environment-and-configuration)
+3. [Testing Strategies and Implementation](#3-testing-strategies-and-implementation)
+4. [Mutation Testing](#4-mutation-testing)
+5. [Results](#5-results)
+6. [Interpretations](#6-interpretations)
+7. [AI Report](#7-ai-report)
+8. [Bibliography](#8-bibliography)
+
+---
+
 ## 1. Introduction
 
 **StudyBuddies** is a Node.js backend application that exposes a GraphQL API for a project-management platform. It supports full CRUD operations over users, projects, sprints, and tasks, secured with JWT authentication and Role-Based Access Control (RBAC).
@@ -1284,9 +1298,11 @@ Tests were added, for example, for the structure of Sequelize query calls (`capt
 |-------|--------------|--------|----------|-----------|
 | Stage 1: Initial tests | — | — | — | — | — |
 | Stage 2: 100% coverage | 1032 | 924 | 106 | 2 |
-| Stage 3: Full kill | TBD | TBD | TBD | TBD |
+| Stage 3: Full kill | 1032 | 958 | 0 | 0 |
 
 ![alt text](images/stage2-mutation.png)
+
+![alt text](images/stage3-mutation.png)
 
 ---
 
